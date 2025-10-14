@@ -1,6 +1,6 @@
 <?php
 
-namespace Daun\StatamicAssetThumbnails\Interfaces;
+namespace Daun\StatamicAssetThumbnails\Drivers;
 
 use Statamic\Assets\Asset;
 

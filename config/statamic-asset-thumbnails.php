@@ -40,6 +40,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Cache
+    |--------------------------------------------------------------------------
+    |
+    | Thumbnails are cached in the `storage` folder and streamed from a
+    | controller to simplify setup. You can serve thumbnails much faster by
+    | creating a custom disk inside the `public` folder and setting it here.
+    |
+    */
+
+    'cache' => [
+
+        'disk' => null,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Queue
     |--------------------------------------------------------------------------
     |
@@ -55,4 +72,5 @@ return [
         'queue' => null,
 
     ],
+
 ];

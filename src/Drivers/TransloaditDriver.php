@@ -3,7 +3,6 @@
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
 use Daun\StatamicAssetThumbnails\Drivers\Transloadit\GenerateThumbnailJob;
-use Daun\StatamicAssetThumbnails\Interfaces\DriverInterface;
 use Daun\StatamicAssetThumbnails\Support\Queue;
 use Statamic\Assets\Asset;
 use transloadit\Transloadit as TransloaditApi;

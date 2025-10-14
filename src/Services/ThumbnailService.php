@@ -2,7 +2,7 @@
 
 namespace Daun\StatamicAssetThumbnails\Services;
 
-use Daun\StatamicAssetThumbnails\Interfaces\DriverInterface;
+use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;

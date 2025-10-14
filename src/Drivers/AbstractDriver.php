@@ -2,7 +2,6 @@
 
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
-use Daun\StatamicAssetThumbnails\Interfaces\DriverInterface;
 use Statamic\Assets\Asset;
 
 abstract class AbstractDriver implements DriverInterface
