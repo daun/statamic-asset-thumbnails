@@ -19,7 +19,7 @@ supports the following service. Support for CloudConvert is planned.
 ## Quick Start
 
 1. Install using `composer require daun/statamic-asset-thumbnails`
-2. Configure the driver and credentials in `config/statamic-asset-thumbnails.php`
+2. Configure the driver and credentials in `config/statamic/asset-thumbnails.php`
 
 ## Commands
 
