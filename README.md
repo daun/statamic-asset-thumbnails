@@ -10,17 +10,16 @@
 
 ## How It Works
 
-The addon generates control panel thumbnails for non-image file by integrating with a
-third-party file conversion service and caching the resulting image preview. Currently it supports
-the following service. Support for CloudConvert is planned.
+The addon generates control panel thumbnails for non-image files by integrating with a
+third-party file conversion service and caching the resulting image preview. Currently it
+supports the following service. Support for CloudConvert is planned.
 
 - [Transloadit](https://transloadit.com/): 9$/month, free tier available
 
 ## Quick Start
 
 1. Install using `composer require daun/statamic-asset-thumbnails`
-2. Publish the config using `php artisan vendor:publish --tag=statamic-asset-thumbnails-config`
-3. Configure the driver and credentials in `config/statamic-asset-thumbnails.php`
+2. Configure the driver and credentials in `config/statamic-asset-thumbnails.php`
 
 ## Commands
 
