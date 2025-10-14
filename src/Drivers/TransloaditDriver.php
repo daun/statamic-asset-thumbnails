@@ -77,6 +77,7 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
         'ogv',
         'mkv',
         'webm',
+        'wmv',
 
         // Audio formats
         'mp3',
