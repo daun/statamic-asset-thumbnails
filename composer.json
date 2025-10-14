@@ -1,0 +1,86 @@
+{
+    "name": "daun/statamic-asset-thumbnails",
+    "description": "Generate asset thumbnails for exotic file formats like videos, raw photos, audio files and documents",
+    "license": "MIT",
+    "type": "statamic-addon",
+    "keywords": [
+        "statamic",
+        "thumbnail",
+        "preview",
+        "image",
+        "asset",
+        "video",
+        "audio",
+        "photo",
+        "document"
+    ],
+    "authors": [
+        {
+            "name": "Philipp Daun",
+            "email": "post@philippdaun.net",
+            "homepage": "https://philippdaun.net"
+        }
+    ],
+    "support": {
+        "email": "post@philippdaun.net"
+    },
+    "require": {
+        "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.8",
+        "laravel/framework": "^11.0 || ^12.0",
+        "statamic/cms": "^6.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.9 || ^3.0",
+        "laravel/pint": "^1.14",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^9.0 || ^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "cloudconvert/cloudconvert-laravel": "^1.1",
+        "transloadit/php-sdk": "^3.2",
+        "spatie/ray": "^1.42"
+    },
+    "suggest": {
+        "transloadit/php-sdk": "Required to generate thumbnails using Transloadit"
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Daun\\StatamicAssetThumbnails\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "pixelfear/composer-dist-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Daun\\StatamicAssetThumbnails\\ServiceProvider"
+            ]
+        },
+        "statamic": {
+            "description": "Generate asset thumbnails for exotic file formats like videos, raw photos, audio files and documents",
+            "name": "Advanced Asset Thumbnails"
+        }
+    },
+    "scripts": {
+        "analyse": "./vendor/bin/phpstan analyse --memory-limit=2G",
+        "format": "./vendor/bin/pint",
+        "lint": "./vendor/bin/pint --test",
+        "test": "./vendor/bin/pest",
+        "test:ci": "./vendor/bin/pest --coverage-clover coverage.xml",
+        "test:coverage": "./vendor/bin/pest --coverage",
+        "test:update": "./vendor/bin/pest --update-snapshots"
+    }
+}
