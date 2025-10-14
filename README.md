@@ -1,7 +1,5 @@
 # Statamic Advanced Asset Thumbnails
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/daun/statamic-asset-thumbnails.svg)](https://packagist.org/packages/daun/statamic-asset-thumbnails)
-
 **Generate asset thumbnails for exotic file formats like videos, raw photos, audio files and documents.**
 
 ![Example asset thumbnails](art/asset-thumbnails.gif)
