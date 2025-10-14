@@ -52,14 +52,15 @@ class ServiceProvider extends AddonServiceProvider
 
     protected function createThumbnailHooks()
     {
-        // Asset resource = asset opened in editor modal
+        // Asset resource = opened in asset editor or linked in asset field
         AssetResource::hook('asset', function ($payload, $next) {
+            $payload->data->thumbnail ??= app(ThumbnailService::class)->url($this->resource);
             $payload->data->preview ??= app(ThumbnailService::class)->url($this->resource);
 
             return $next($payload);
         });
 
-        // Folder asset resource = asset listed in asset browser or asset field
+        // Folder asset resource = listed in asset browser
         FolderAssetResource::hook('asset', function ($payload, $next) {
             $payload->data->thumbnail ??= app(ThumbnailService::class)->url($this->resource);
 
