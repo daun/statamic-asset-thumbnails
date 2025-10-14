@@ -2,14 +2,12 @@
 
 namespace Tests\Concerns;
 
-use Daun\StatamicAssetThumbnails\Fieldtypes\PlaceholderFieldtype;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Statamic\Assets\Asset;
 use Statamic\Assets\AssetContainer;
 use Statamic\Console\Commands\GlideClear;
-use Statamic\Facades\Blink;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Stache;
 use Statamic\Statamic;

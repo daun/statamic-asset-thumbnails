@@ -9,7 +9,6 @@ use Statamic\Addons\Manifest;
 use Statamic\Providers\StatamicServiceProvider;
 use Statamic\Statamic;
 use Tests\Concerns\DealsWithAssets;
-use Tests\Concerns\InteractsWithAntlersViews;
 use Tests\Concerns\PreventSavingStacheItemsToDisk;
 use Tests\Concerns\ResolvesStatamicConfig;
 use Wilderborn\Partyline\ServiceProvider as PartyLineServiceProvider;

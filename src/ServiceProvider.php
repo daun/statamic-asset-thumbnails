@@ -55,12 +55,14 @@ class ServiceProvider extends AddonServiceProvider
         // Asset resource = asset opened in editor modal
         AssetResource::hook('asset', function ($payload, $next) {
             $payload->data->preview ??= app(ThumbnailService::class)->url($this->resource);
+
             return $next($payload);
         });
 
         // Folder asset resource = asset listed in asset browser or asset field
         FolderAssetResource::hook('asset', function ($payload, $next) {
             $payload->data->thumbnail ??= app(ThumbnailService::class)->url($this->resource);
+
             return $next($payload);
         });
     }

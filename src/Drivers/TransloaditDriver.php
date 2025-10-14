@@ -2,7 +2,6 @@
 
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
-use Daun\StatamicAssetThumbnails\Drivers\AbstractDriver;
 use Daun\StatamicAssetThumbnails\Drivers\Transloadit\GenerateThumbnailJob;
 use Daun\StatamicAssetThumbnails\Interfaces\DriverInterface;
 use Daun\StatamicAssetThumbnails\Support\Queue;
@@ -49,7 +48,6 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
         'ai',
         'psd',
         'psb',
-
 
         // Raw image formats
         'raw',

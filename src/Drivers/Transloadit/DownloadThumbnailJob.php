@@ -41,6 +41,7 @@ class DownloadThumbnailJob implements ShouldQueue
         // Assembly not found or still processing, retry
         if (! $assembly || $this->isAssemblyProcessing($assembly)) {
             $this->retryJob();
+
             return;
         }
 
