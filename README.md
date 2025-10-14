@@ -22,6 +22,14 @@ the following service. Support for CloudConvert is planned.
 2. Publish the config using `php artisan vendor:publish --tag=statamic-asset-thumbnails-config`
 3. Configure the driver and credentials in `config/statamic-asset-thumbnails.php`
 
+## Commands
+
+You can clear the thumbnail cache using the following command:
+
+```bash
+php please thumbnails:clear
+```
+
 ## Cache Disk
 
 Thumbnails are cached in the `storage` folder and streamed from a controller to simplify setup.
