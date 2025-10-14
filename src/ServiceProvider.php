@@ -2,6 +2,7 @@
 
 namespace Daun\StatamicAssetThumbnails;
 
+use Daun\StatamicAssetThumbnails\Commands\ClearCommand;
 use Daun\StatamicAssetThumbnails\Listeners\ClearThumbnail;
 use Daun\StatamicAssetThumbnails\Listeners\GenerateThumbnail;
 use Daun\StatamicAssetThumbnails\Services\ThumbnailService;
@@ -16,7 +17,7 @@ use Statamic\Statamic;
 class ServiceProvider extends AddonServiceProvider
 {
     protected $commands = [
-        Commands\ClearCommand::class,
+        ClearCommand::class,
     ];
 
     protected $listen = [
