@@ -20,6 +20,18 @@ supports the following service. Support for CloudConvert is planned.
 
 1. Install using `composer require daun/statamic-asset-thumbnails`
 2. Configure the driver and credentials in `config/statamic/asset-thumbnails.php`
+3. Any supported files will automatically get a thumbnail in the control panel
+
+## File Formats
+
+The Transloadit driver supports the following file formats:
+
+- **Image**: tiff, bmp
+- **Video**: mp4, mov, avi, mkv, webm, wmv
+- **Audio**: mp3, aac, aif, m4a, off, opus, flac, wav
+- **Raw Photo**: raw, dng, heic, heif, nef, nrw, cr2, cr3, crw
+- **Document**: pdf, doc, docx, ppt, pptx, xls, xlsx, rtf, txt
+- **Adobe**: psd, ai, eps
 
 ## Commands
 
