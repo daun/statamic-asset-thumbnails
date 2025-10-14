@@ -22,6 +22,26 @@ the following service. Support for CloudConvert is planned.
 2. Publish the config using `php artisan vendor:publish --tag=statamic-asset-thumbnails-config`
 3. Configure the driver and credentials in `config/statamic-asset-thumbnails.php`
 
+## Cache Disk
+
+Thumbnails are cached in the `storage` folder and streamed from a controller to simplify setup.
+If you define a custom disk inside the `public` folder, thumbnails can be served much faster by
+redirecting to a public url instead.
+
+Define a new disk in `config/filesystems.php`, then update the `cache.disk` option in the
+addon's config file.
+
+```php
+'disks' => [
+  'thumbnails' => [
+    'driver' => 'local',
+    'root' => storage_path('app/public/thumbnails'),
+    'url' => env('APP_URL').'/storage/thumbnails',
+    'visibility' => 'public',
+  ],
+],
+```
+
 ## License
 
 This addon is paid software with an open-source codebase. To use it in production, you'll need

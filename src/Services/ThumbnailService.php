@@ -2,7 +2,7 @@
 
 namespace Daun\StatamicAssetThumbnails\Services;
 
-use Daun\StatamicAssetThumbnails\Interfaces\DriverInterface;
+use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +17,7 @@ class ThumbnailService
 
     public function __construct()
     {
-        $this->disk = $this->cacheDisk();
+        $this->disk = $this->customCacheDisk() ?? $this->defaultCacheDisk();
     }
 
     public function enabled(): bool
@@ -46,9 +46,17 @@ class ThumbnailService
 
     public function url(Asset $asset): ?string
     {
-        return $this->canGenerate($asset)
-            ? cp_route('custom.thumbnails.show', base64_encode($asset->id()))
-            : null;
+        $path = $this->get($asset);
+
+        if ($path && $this->diskIsPublic()) {
+            return $this->disk->url($path);
+        }
+
+        if ($path || $this->canGenerate($asset)) {
+            return cp_route('custom.thumbnails.show', base64_encode($asset->id()));
+        }
+
+        return null;
     }
 
     public function exists(Asset $asset): bool
@@ -143,11 +151,29 @@ class ThumbnailService
             : false;
     }
 
-    public function cacheDisk(): FilesystemAdapter
+    public function disk(): FilesystemAdapter
+    {
+        return $this->disk;
+    }
+
+    protected function diskIsPublic(): bool
+    {
+        return ($this->disk->getConfig()['visibility'] ?? null) === 'public';
+    }
+
+    protected function customCacheDisk(): ?FilesystemAdapter
+    {
+        return ($disk = config('statamic-asset-thumbnails.cache.disk'))
+            ? Storage::disk($disk)
+            : null;
+    }
+
+    protected function defaultCacheDisk(): FilesystemAdapter
     {
         return Storage::createLocalDriver([
             'driver' => 'local',
-            'root' => $this->cacheRoot(),
+            'root' => storage_path('statamic/addons/asset-thumbnails'),
+            'visibility' => 'private',
             'permissions' => [
                 'file' => [
                     'public' => 0644,
@@ -158,12 +184,7 @@ class ThumbnailService
                     'private' => 0700,
                 ],
             ],
-        ], 'asset_thumbnails');
-    }
-
-    public function cacheRoot(): string
-    {
-        return config('statamic-asset-thumbnails.cache_path', storage_path('statamic/addons/asset-thumbnails'));
+        ], 'asset_thumbnails_default');
     }
 
     public function cacheDir(Asset $asset): string
