@@ -45,7 +45,7 @@ class ServiceProvider extends AddonServiceProvider
         $this->mergeConfigFrom($origin, 'statamic.asset-thumbnails');
 
         $this->publishes([
-            $origin => config_path('statamic/asset-thumbnails.php')
+            $origin => config_path('statamic/asset-thumbnails.php'),
         ], 'statamic-asset-thumbnails-config');
 
         return $this;
