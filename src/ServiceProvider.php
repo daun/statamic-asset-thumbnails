@@ -37,6 +37,20 @@ class ServiceProvider extends AddonServiceProvider
         $this->createThumbnailHooks();
     }
 
+    protected function bootConfig()
+    {
+        $directory = $this->getAddon()->directory();
+        $origin = "{$directory}config/statamic/asset-thumbnails.php";
+
+        $this->mergeConfigFrom($origin, 'statamic.asset-thumbnails');
+
+        $this->publishes([
+            $origin => config_path('statamic/asset-thumbnails.php')
+        ], 'statamic-asset-thumbnails-config');
+
+        return $this;
+    }
+
     protected function autoPublishConfig(): self
     {
         Statamic::afterInstalled(function ($command) {
