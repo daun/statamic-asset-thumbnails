@@ -2,6 +2,9 @@
 
 namespace Daun\StatamicAssetThumbnails;
 
+use Daun\StatamicAssetThumbnails\Commands\ClearCommand;
+use Daun\StatamicAssetThumbnails\Listeners\ClearThumbnail;
+use Daun\StatamicAssetThumbnails\Listeners\GenerateThumbnail;
 use Daun\StatamicAssetThumbnails\Services\ThumbnailService;
 use Statamic\Events\AssetDeleted;
 use Statamic\Events\AssetReuploaded;
@@ -13,21 +16,14 @@ use Statamic\Statamic;
 
 class ServiceProvider extends AddonServiceProvider
 {
-    // protected $commands = [
-    //     Commands\GenerateCommand::class,
-    //     Commands\ClearCommand::class,
-    // ];
+    protected $commands = [
+        ClearCommand::class,
+    ];
 
     protected $listen = [
-        AssetUploaded::class => [
-            Listeners\GenerateThumbnail::class,
-        ],
-        AssetReuploaded::class => [
-            Listeners\GenerateThumbnail::class,
-        ],
-        AssetDeleted::class => [
-            Listeners\ClearThumbnail::class,
-        ],
+        AssetUploaded::class => [GenerateThumbnail::class],
+        AssetReuploaded::class => [GenerateThumbnail::class],
+        AssetDeleted::class => [ClearThumbnail::class],
     ];
 
     public function register()
