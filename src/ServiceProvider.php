@@ -64,8 +64,8 @@ class ServiceProvider extends AddonServiceProvider
     {
         // Asset resource = opened in asset editor or linked in asset field
         AssetResource::hook('asset', function ($payload, $next) {
-            $payload->data->thumbnail ??= app(ThumbnailService::class)->url($this->resource);
-            $payload->data->preview ??= app(ThumbnailService::class)->url($this->resource);
+            $payload->data->thumbnail ??= $thumbnail = app(ThumbnailService::class)->url($this->resource);
+            $payload->data->preview ??= $thumbnail ?? null;
 
             return $next($payload);
         });
