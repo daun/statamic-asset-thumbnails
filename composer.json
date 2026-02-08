@@ -27,7 +27,7 @@
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.8",
-        "laravel/framework": "^11.0 || ^12.0",
+        "laravel/framework": "^12.0",
         "statamic/cms": "^6.0"
     },
     "require-dev": {
@@ -44,8 +44,6 @@
     "suggest": {
         "transloadit/php-sdk": "Required to generate thumbnails using Transloadit"
     },
-    "minimum-stability": "alpha",
-    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Daun\\StatamicAssetThumbnails\\": "src"
