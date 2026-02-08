@@ -4,10 +4,6 @@
 
 ![Example asset thumbnails](art/asset-thumbnails.gif)
 
-> [!NOTE]
-> Requires Statamic 6, which is currently in alpha, so the implementation might change and things
-> could break at any time. Please report any issues you encounter.
-
 ## How It Works
 
 The addon generates control panel thumbnails for non-image files by integrating with a
