@@ -16,9 +16,9 @@ class ThumbnailController extends CpController
     public function show(string $id): Response
     {
         $asset = Assets::findById(base64_decode($id));
-        if (! $asset) {
-            abort(404);
-        }
+        abort_unless($asset, 404);
+
+        $this->authorize('view', $asset);
 
         if ($this->service->isGenerating($asset)) {
             $this->service->waitUntilGenerated($asset);
