@@ -17,6 +17,7 @@ supports the following service. Support for CloudConvert is planned.
 1. Install using `composer require daun/statamic-asset-thumbnails`
 2. Configure the driver and credentials in `config/statamic/asset-thumbnails.php`
 3. Any supported files will automatically get a thumbnail in the control panel
+4. Recommended: set up a custom cache disk for faster thumbnail loading (see below for details)
 
 ## File Formats
 
@@ -39,21 +40,30 @@ php please thumbnails:clear
 
 ## Cache Disk
 
-Thumbnails are cached in the `storage` folder and streamed from a controller to simplify setup.
-If you define a custom disk inside the `public` folder, thumbnails can be served much faster by
-redirecting to a public url instead.
+The default setup streams cached thumbnails from a custom controller. This simplifies initial setup,
+but comes with some overhead. To make thumbnails load faster, you can define a custom disk inside
+your app's `public` folder. Thumbnails can then be served directly from a public url, circumventing
+Laravel entirely.
 
-Define a new disk in `config/filesystems.php`, then update the `cache.disk` option in the
-addon's config file.
+First, define a new disk in `config/filesystems.php`.
 
-```php
+```diff
 'disks' => [
-  'thumbnails' => [
-    'driver' => 'local',
-    'root' => storage_path('app/public/thumbnails'),
-    'url' => env('APP_URL').'/storage/thumbnails',
-    'visibility' => 'public',
-  ],
++  'thumbnails' => [
++    'driver' => 'local',
++    'root' => storage_path('app/public/thumbnails'),
++    'url' => env('APP_URL').'/storage/thumbnails',
++    'visibility' => 'public',
++  ],
+],
+```
+
+Then, update the cache disk in `config/statamic/asset-thumbnails.php`.
+
+```diff
+'cache' => [
+-  'disk' => null,
++  'disk' => 'thumbnails',
 ],
 ```
 
