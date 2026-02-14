@@ -37,9 +37,9 @@
         "orchestra/testbench": "^9.0 || ^10.0",
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.0",
-        "cloudconvert/cloudconvert-laravel": "^1.1",
         "transloadit/php-sdk": "^3.2",
-        "spatie/ray": "^1.42"
+        "spatie/ray": "^1.42",
+        "cloudconvert/cloudconvert-php": "^3.4"
     },
     "suggest": {
         "transloadit/php-sdk": "Required to generate thumbnails using Transloadit"
