@@ -53,7 +53,7 @@ class ThumbnailService
         }
 
         if ($path || $this->canGenerate($asset)) {
-            return cp_route('custom.thumbnails.show', base64_encode($asset->id()));
+            return cp_route('addons.asset-thumbnails.show', base64_encode($asset->id()));
         }
 
         return null;
