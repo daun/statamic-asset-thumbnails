@@ -24,7 +24,7 @@ beforeEach(function () {
 
 it('denies access when logged out', function () {
     $this->get('/cp/addons/daun/thumbnails/'.base64_encode('test::one.png'))
-        ->assertForbidden();
+        ->assertRedirect('/cp/auth/login');
 });
 
 it('denies access without permission to view asset', function () {
@@ -33,7 +33,7 @@ it('denies access without permission to view asset', function () {
 
     $this->actingAs($user)
         ->get('/cp/addons/daun/thumbnails/'.base64_encode('test::one.png'))
-        ->assertForbidden();
+        ->assertRedirect('/cp');
 });
 
 it('404s when the asset doesnt exist', function () {
