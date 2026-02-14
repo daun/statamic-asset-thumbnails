@@ -1,9 +1,9 @@
 <?php
 
+use Facades\Statamic\Version;
 use Illuminate\Http\UploadedFile;
 use Statamic\Facades\AssetContainer;
 use Statamic\Facades\User;
-use Facades\Statamic\Version;
 
 beforeEach(function () {
     if (! config('app.key')) {
