@@ -39,8 +39,6 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
         'bmp',
         'tif',
         'tiff',
-        // 'svg',
-        // 'svgz',
 
         // Adobe formats
         'eps',
