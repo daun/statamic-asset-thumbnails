@@ -23,7 +23,7 @@ beforeEach(function () {
 });
 
 it('denies access when logged out', function () {
-    $this->get('/cp/addons/daun/thumbnails/'.base64_encode('test::one.png'))
+    $this->get('/cp/addons/asset-thumbnails/'.base64_encode('test::one.png'))
         ->assertRedirect('/cp/auth/login');
 });
 
@@ -32,7 +32,7 @@ it('denies access without permission to view asset', function () {
     $user = User::make()->assignRole('test')->save();
 
     $this->actingAs($user)
-        ->get('/cp/addons/daun/thumbnails/'.base64_encode('test::one.png'))
+        ->get('/cp/addons/asset-thumbnails/'.base64_encode('test::one.png'))
         ->assertRedirect('/cp');
 });
 
@@ -41,7 +41,7 @@ it('404s when the asset doesnt exist', function () {
     $user = User::make()->assignRole('test')->save();
 
     $this->actingAs($user)
-        ->get('/cp/addons/daun/thumbnails/'.base64_encode('test::unknown.png'))
+        ->get('/cp/addons/asset-thumbnails/'.base64_encode('test::unknown.png'))
         ->assertNotFound();
 });
 
@@ -50,6 +50,6 @@ it('redirects to placeholder', function () {
     $user = User::make()->assignRole('test')->save();
 
     $this->actingAs($user)
-        ->get('/cp/addons/daun/thumbnails/'.base64_encode('test::one.png'))
+        ->get('/cp/addons/asset-thumbnails/'.base64_encode('test::one.png'))
         ->assertRedirect('https://placehold.co/600?text=Generating\nPreview&font=raleway');
 });
