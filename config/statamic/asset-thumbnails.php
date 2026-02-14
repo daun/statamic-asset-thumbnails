@@ -15,6 +15,7 @@ return [
     |
     | Available drivers:
     | - \Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver::class
+    | - \Daun\StatamicAssetThumbnails\Drivers\CloudConvertDriver::class
     | - `null` (disable generation of new thumbnails)
     |
     */
@@ -35,6 +36,21 @@ return [
         'auth_key' => env('TRANSLOADIT_AUTH_KEY'),
 
         'auth_secret' => env('TRANSLOADIT_AUTH_SECRET'),
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | CloudConvert Driver
+    |--------------------------------------------------------------------------
+    |
+    | Settings for using the CloudConvert service for thumbnail generation.
+    |
+    */
+
+    'cloudconvert' => [
+
+        'api_key' => env('CLOUDCONVERT_API_KEY'),
 
     ],
 
