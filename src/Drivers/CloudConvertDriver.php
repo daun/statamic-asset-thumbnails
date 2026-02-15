@@ -3,35 +3,30 @@
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
 use Daun\StatamicAssetThumbnails\Drivers\CloudConvert\GenerateThumbnailJob;
-use Daun\StatamicAssetThumbnails\Support\Queue;
 use Statamic\Assets\Asset;
-use CloudConvert\CloudConvert as CloudConvertApi;
+use CloudConvert\CloudConvert;
 
 class CloudConvertDriver extends AbstractDriver implements DriverInterface
 {
     protected string $id = 'cloudconvert';
 
-    protected CloudConvertApi $api;
+    protected CloudConvert $api;
 
     public function __construct()
     {
-        $this->api = new CloudConvertApi([
+        $this->api = new CloudConvert([
             'api_key' => config('statamic-asset-thumbnails.cloudconvert.api_key'),
-            'sandbox' => false,
         ]);
     }
 
-    public function api(): CloudConvertApi
+    public function api(): CloudConvert
     {
         return $this->api;
     }
 
     public function generate(Asset $asset): void
     {
-        GenerateThumbnailJob::dispatch($asset)
-            ->onConnection(Queue::connection())
-            ->onQueue(Queue::queue())
-            ->afterResponse();
+        GenerateThumbnailJob::dispatch($asset)->afterResponse();
     }
 
     protected array $supportedExtensions = [

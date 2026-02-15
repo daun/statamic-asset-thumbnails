@@ -3,35 +3,31 @@
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
 use Daun\StatamicAssetThumbnails\Drivers\Transloadit\GenerateThumbnailJob;
-use Daun\StatamicAssetThumbnails\Support\Queue;
 use Statamic\Assets\Asset;
-use transloadit\Transloadit as TransloaditApi;
+use transloadit\Transloadit;
 
 class TransloaditDriver extends AbstractDriver implements DriverInterface
 {
     protected string $id = 'transloadit';
 
-    protected TransloaditApi $api;
+    protected Transloadit $api;
 
     public function __construct()
     {
-        $this->api = new TransloaditApi([
+        $this->api = new Transloadit([
             'key' => config('statamic-asset-thumbnails.transloadit.auth_key'),
             'secret' => config('statamic-asset-thumbnails.transloadit.auth_secret'),
         ]);
     }
 
-    public function api(): TransloaditApi
+    public function api(): Transloadit
     {
         return $this->api;
     }
 
     public function generate(Asset $asset): void
     {
-        GenerateThumbnailJob::dispatch($asset)
-            ->onConnection(Queue::connection())
-            ->onQueue(Queue::queue())
-            ->afterResponse();
+        GenerateThumbnailJob::dispatch($asset)->afterResponse();
     }
 
     protected array $supportedExtensions = [
