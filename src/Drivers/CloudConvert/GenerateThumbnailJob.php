@@ -31,9 +31,9 @@ class GenerateThumbnailJob implements ShouldQueue
             return;
         }
 
-        $assemblyId = $this->createThumbnailJob($driver);
-        if ($assemblyId) {
-            DownloadThumbnailJob::dispatch($this->asset, $assemblyId)->delay(now()->addSeconds(2));
+        $jobId = $this->createThumbnailJob($driver);
+        if ($jobId) {
+            DownloadThumbnailJob::dispatch($this->asset, $jobId)->delay(now()->addSeconds(2));
         }
     }
 
@@ -61,7 +61,7 @@ class GenerateThumbnailJob implements ShouldQueue
 
         $driver->api()->tasks()->upload($uploadTask, fopen($this->asset->resolvedPath(), 'r'), $this->asset->basename());
 
-        // ray($response, $response->data ?? [])->label('CloudConvert response');
+        ray($job, $job->getId())->label('CloudConvert job');
 
         return $job->getId();
     }
