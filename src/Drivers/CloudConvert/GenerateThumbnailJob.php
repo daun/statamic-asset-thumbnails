@@ -39,7 +39,7 @@ class GenerateThumbnailJob implements ShouldQueue
 
     protected function createThumbnailJob(CloudConvertDriver $driver): ?string
     {
-        $job = (new Job())
+        $job = (new Job)
             ->addTask(new Task('import/upload', 'upload-task'))
             ->addTask(
                 (new Task('thumbnail', 'thumbnail-task'))

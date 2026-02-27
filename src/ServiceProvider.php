@@ -43,7 +43,7 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         $this->app->singleton(NullDriver::class, function () {
-            return new NullDriver();
+            return new NullDriver;
         });
 
         $this->app->singleton(DriverInterface::class, function () {

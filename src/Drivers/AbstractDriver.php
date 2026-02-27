@@ -8,9 +8,7 @@ abstract class AbstractDriver implements DriverInterface
 {
     protected array $supportedExtensions;
 
-    public function __construct(array $config = [])
-    {
-    }
+    public function __construct(array $config = []) {}
 
     /**
      * Check if the driver supports generating thumbnails for the given asset.

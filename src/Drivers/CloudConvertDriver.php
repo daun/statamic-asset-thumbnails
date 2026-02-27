@@ -2,9 +2,9 @@
 
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
+use CloudConvert\CloudConvert;
 use Daun\StatamicAssetThumbnails\Drivers\CloudConvert\GenerateThumbnailJob;
 use Statamic\Assets\Asset;
-use CloudConvert\CloudConvert;
 
 class CloudConvertDriver extends AbstractDriver implements DriverInterface
 {
