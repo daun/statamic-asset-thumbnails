@@ -35,11 +35,11 @@ class ServiceProvider extends AddonServiceProvider
         $this->app->singleton(ThumbnailService::class);
 
         $this->app->singleton(TransloaditDriver::class, function () {
-            return new TransloaditDriver(config('statamic-asset-thumbnails.transloadit', []));
+            return new TransloaditDriver(config('statamic.asset-thumbnails.transloadit', []));
         });
 
         $this->app->singleton(CloudConvertDriver::class, function () {
-            return new CloudConvertDriver(config('statamic-asset-thumbnails.cloudconvert', []));
+            return new CloudConvertDriver(config('statamic.asset-thumbnails.cloudconvert', []));
         });
 
         $this->app->singleton(NullDriver::class, function () {
@@ -47,7 +47,7 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         $this->app->singleton(DriverInterface::class, function () {
-            $driver = config('statamic-asset-thumbnails.driver', 'transloadit');
+            $driver = config('statamic.asset-thumbnails.driver', 'transloadit');
 
             return match ($driver) {
                 'transloadit', TransloaditDriver::class => app(TransloaditDriver::class),
