@@ -6,16 +6,10 @@ use Statamic\Assets\Asset;
 
 abstract class AbstractDriver implements DriverInterface
 {
-    protected string $id;
-
     protected array $supportedExtensions;
 
-    /**
-     * The unique id of the driver.
-     */
-    public function id(): string
+    public function __construct(array $config = [])
     {
-        return $this->id;
     }
 
     /**

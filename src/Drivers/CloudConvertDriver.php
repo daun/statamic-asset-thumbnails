@@ -8,14 +8,12 @@ use CloudConvert\CloudConvert;
 
 class CloudConvertDriver extends AbstractDriver implements DriverInterface
 {
-    protected string $id = 'cloudconvert';
-
     protected CloudConvert $api;
 
-    public function __construct()
+    public function __construct(array $config = [])
     {
         $this->api = new CloudConvert([
-            'api_key' => config('statamic-asset-thumbnails.cloudconvert.api_key'),
+            'api_key' => $config['api_key'] ?? null,
         ]);
     }
 

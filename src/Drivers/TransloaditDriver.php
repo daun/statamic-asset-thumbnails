@@ -8,15 +8,13 @@ use transloadit\Transloadit;
 
 class TransloaditDriver extends AbstractDriver implements DriverInterface
 {
-    protected string $id = 'transloadit';
-
     protected Transloadit $api;
 
-    public function __construct()
+    public function __construct(array $config = [])
     {
         $this->api = new Transloadit([
-            'key' => config('statamic-asset-thumbnails.transloadit.auth_key'),
-            'secret' => config('statamic-asset-thumbnails.transloadit.auth_secret'),
+            'key' => $config['auth_key'] ?? null,
+            'secret' => $config['auth_secret'] ?? null,
         ]);
     }
 

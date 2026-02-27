@@ -14,13 +14,13 @@ return [
     | in the sections below. Consult the readme for details.
     |
     | Available drivers:
-    | - \Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver::class
-    | - \Daun\StatamicAssetThumbnails\Drivers\CloudConvertDriver::class
+    | - `transloadit`
+    | - `cloudconvert`
     | - `null` (disable generation of new thumbnails)
     |
     */
 
-    'driver' => env('ASSET_THUMBNAILS_DRIVER', \Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver::class),
+    'driver' => env('ASSET_THUMBNAILS_DRIVER', 'transloadit'),
 
     /*
     |--------------------------------------------------------------------------
