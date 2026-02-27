@@ -42,6 +42,7 @@
         "cloudconvert/cloudconvert-php": "^3.4"
     },
     "suggest": {
+        "cloudconvert/cloudconvert-php": "Required to generate thumbnails using CloudConvert",
         "transloadit/php-sdk": "Required to generate thumbnails using Transloadit"
     },
     "autoload": {
