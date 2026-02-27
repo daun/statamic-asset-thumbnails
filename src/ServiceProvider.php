@@ -34,15 +34,15 @@ class ServiceProvider extends AddonServiceProvider
     {
         $this->app->singleton(ThumbnailService::class);
 
-        $this->app->singleton('statamic-asset-thumbnails.driver.transloadit', function () {
+        $this->app->singleton(TransloaditDriver::class, function () {
             return new TransloaditDriver(config('statamic-asset-thumbnails.transloadit', []));
         });
 
-        $this->app->singleton('statamic-asset-thumbnails.driver.cloudconvert', function () {
+        $this->app->singleton(CloudConvertDriver::class, function () {
             return new CloudConvertDriver(config('statamic-asset-thumbnails.cloudconvert', []));
         });
 
-        $this->app->singleton('statamic-asset-thumbnails.driver.null', function () {
+        $this->app->singleton(NullDriver::class, function () {
             return new NullDriver();
         });
 
@@ -50,9 +50,9 @@ class ServiceProvider extends AddonServiceProvider
             $driver = config('statamic-asset-thumbnails.driver', 'transloadit');
 
             return match ($driver) {
-                'transloadit' => app('statamic-asset-thumbnails.driver.transloadit'),
-                'cloudconvert' => app('statamic-asset-thumbnails.driver.cloudconvert'),
-                null, 'null' => app('statamic-asset-thumbnails.driver.null'),
+                'transloadit', TransloaditDriver::class => app(TransloaditDriver::class),
+                'cloudconvert', CloudConvertDriver::class => app(CloudConvertDriver::class),
+                null, 'null', NullDriver::class => app(NullDriver::class),
                 default => throw new \RuntimeException("Unsupported asset thumbnail driver [$driver]."),
             };
         });
