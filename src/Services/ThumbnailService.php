@@ -20,28 +20,9 @@ class ThumbnailService
         $this->disk = $this->customCacheDisk() ?? $this->defaultCacheDisk();
     }
 
-    public function enabled(): bool
-    {
-        return (bool) config('statamic-asset-thumbnails.driver');
-    }
-
     public function driver(): DriverInterface
     {
-        if ($this->driver) {
-            return $this->driver;
-        }
-
-        $class = config('statamic-asset-thumbnails.driver');
-        if (! class_exists($class)) {
-            throw new \RuntimeException("Thumbnail driver class [$class] does not exist.");
-        }
-
-        $instance = app()->make($class);
-        if (! $instance instanceof DriverInterface) {
-            throw new \RuntimeException("Thumbnail driver class [$class] must implement DriverInterface.");
-        }
-
-        return $this->driver = $instance;
+        return app()->make(DriverInterface::class);
     }
 
     public function url(Asset $asset): ?string
@@ -84,9 +65,7 @@ class ThumbnailService
 
     public function canGenerate(Asset $asset): bool
     {
-        return $this->enabled()
-            && $this->driver()
-            && $this->driver()->supports($asset)
+        return $this->driver()->supports($asset)
             && file_exists($asset->resolvedPath());
     }
 
