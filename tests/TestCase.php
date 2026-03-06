@@ -4,21 +4,21 @@ namespace Tests;
 
 use Daun\StatamicAssetThumbnails\ServiceProvider as AddonServiceProvider;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
-use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use Statamic\Addons\Manifest;
-use Statamic\Providers\StatamicServiceProvider;
-use Statamic\Statamic;
+use Statamic\Testing\AddonTestCase;
+use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;
 use Tests\Concerns\DealsWithAssets;
-use Tests\Concerns\PreventSavingStacheItemsToDisk;
+use Tests\Concerns\FakesRoles;
 use Tests\Concerns\ResolvesStatamicConfig;
-use Wilderborn\Partyline\ServiceProvider as PartyLineServiceProvider;
 
-abstract class TestCase extends OrchestraTestCase
+abstract class TestCase extends AddonTestCase
 {
     use DealsWithAssets;
+    use FakesRoles;
     use InteractsWithViews;
-    use PreventSavingStacheItemsToDisk;
+    use PreventsSavingStacheItemsToDisk;
     use ResolvesStatamicConfig;
+
+    protected string $addonServiceProvider = AddonServiceProvider::class;
 
     protected function setUp(): void
     {
@@ -32,22 +32,6 @@ abstract class TestCase extends OrchestraTestCase
         $this->tearDownAssetTest();
 
         parent::tearDown();
-    }
-
-    protected function getPackageProviders($app)
-    {
-        return [
-            AddonServiceProvider::class,
-            PartyLineServiceProvider::class,
-            StatamicServiceProvider::class,
-        ];
-    }
-
-    protected function getPackageAliases($app)
-    {
-        return [
-            'Statamic' => Statamic::class,
-        ];
     }
 
     protected function resolveApplicationConfiguration($app)
@@ -74,22 +58,5 @@ abstract class TestCase extends OrchestraTestCase
 
         // Set specific stache stores for asset tests
         $this->resolveStacheStoresForAssetTest($app);
-    }
-
-    protected function getEnvironmentSetUp($app): void
-    {
-        parent::getEnvironmentSetUp($app);
-
-        $this->registerStatamicAddon($app);
-    }
-
-    protected function registerStatamicAddon($app)
-    {
-        $app->make(Manifest::class)->manifest = [
-            'daun/statamic-asset-thumbnails' => [
-                'id' => 'daun/statamic-asset-thumbnails',
-                'namespace' => 'Daun\\StatamicAssetThumbnails',
-            ],
-        ];
     }
 }

@@ -5,6 +5,7 @@ namespace Daun\StatamicAssetThumbnails\Services;
 use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Statamic\Assets\Asset;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -20,28 +21,9 @@ class ThumbnailService
         $this->disk = $this->customCacheDisk() ?? $this->defaultCacheDisk();
     }
 
-    public function enabled(): bool
-    {
-        return (bool) config('statamic-asset-thumbnails.driver');
-    }
-
     public function driver(): DriverInterface
     {
-        if ($this->driver) {
-            return $this->driver;
-        }
-
-        $class = config('statamic-asset-thumbnails.driver');
-        if (! class_exists($class)) {
-            throw new \RuntimeException("Thumbnail driver class [$class] does not exist.");
-        }
-
-        $instance = app()->make($class);
-        if (! $instance instanceof DriverInterface) {
-            throw new \RuntimeException("Thumbnail driver class [$class] must implement DriverInterface.");
-        }
-
-        return $this->driver = $instance;
+        return app()->make(DriverInterface::class);
     }
 
     public function url(Asset $asset): ?string
@@ -53,7 +35,7 @@ class ThumbnailService
         }
 
         if ($path || $this->canGenerate($asset)) {
-            return cp_route('custom.thumbnails.show', base64_encode($asset->id()));
+            return cp_route('addons.asset-thumbnails.show', base64_encode($asset->id()));
         }
 
         return null;
@@ -84,9 +66,7 @@ class ThumbnailService
 
     public function canGenerate(Asset $asset): bool
     {
-        return $this->enabled()
-            && $this->driver()
-            && $this->driver()->supports($asset)
+        return $this->driver()->supports($asset)
             && file_exists($asset->resolvedPath());
     }
 
@@ -149,6 +129,22 @@ class ThumbnailService
         return $this->disk->directoryExists($dir)
             ? $this->disk->deleteDirectory($dir)
             : false;
+    }
+
+    /**
+     * Download file contents from a URL.
+     *
+     * Extracted to allow mocking in tests via Http::fake().
+     */
+    public function download(string $url): ?string
+    {
+        try {
+            $response = Http::get($url);
+
+            return $response->successful() ? $response->body() : null;
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     public function disk(): FilesystemAdapter

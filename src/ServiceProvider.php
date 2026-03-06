@@ -3,6 +3,10 @@
 namespace Daun\StatamicAssetThumbnails;
 
 use Daun\StatamicAssetThumbnails\Commands\ClearCommand;
+use Daun\StatamicAssetThumbnails\Drivers\CloudConvertDriver;
+use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
+use Daun\StatamicAssetThumbnails\Drivers\NullDriver;
+use Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver;
 use Daun\StatamicAssetThumbnails\Listeners\ClearThumbnail;
 use Daun\StatamicAssetThumbnails\Listeners\GenerateThumbnail;
 use Daun\StatamicAssetThumbnails\Services\ThumbnailService;
@@ -29,6 +33,32 @@ class ServiceProvider extends AddonServiceProvider
     public function register()
     {
         $this->app->singleton(ThumbnailService::class);
+
+        $this->app->singleton(NullDriver::class, function () {
+            return new NullDriver;
+        });
+
+        $this->app->singleton(DriverInterface::class, function () {
+            $driver = config('statamic.asset-thumbnails.driver', 'transloadit');
+
+            return match ($driver) {
+                'transloadit' => $this->resolveDriver('transloadit', TransloaditDriver::class, 'transloadit\\Transloadit', 'transloadit/php-sdk'),
+                'cloudconvert' => $this->resolveDriver('cloudconvert', CloudConvertDriver::class, 'CloudConvert\\CloudConvert', 'cloudconvert/cloudconvert-php'),
+                null, 'null' => app(NullDriver::class),
+                default => throw new \RuntimeException("Unsupported asset thumbnail driver [$driver]."),
+            };
+        });
+    }
+
+    protected function resolveDriver(string $name, string $driverClass, string $sdkClass, string $package): DriverInterface
+    {
+        if (! class_exists($sdkClass)) {
+            throw new \RuntimeException(
+                "The [{$name}] driver requires the [{$package}] package. Install it with: composer require {$package}"
+            );
+        }
+
+        return new $driverClass(config("statamic.asset-thumbnails.{$name}", []));
     }
 
     public function bootAddon(): void

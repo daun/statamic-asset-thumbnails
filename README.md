@@ -7,36 +7,49 @@
 ## How It Works
 
 The addon generates control panel thumbnails for non-image files by integrating with a
-third-party file conversion service and caching the resulting image preview. Currently it
-supports the following service. Support for CloudConvert is planned.
+third-party file conversion service and download the resulting preview image.
 
-- [Transloadit](https://transloadit.com/): 9$/month, free tier available
+## File Conversion Services
+
+[Transloadit](https://transloadit.com/)  
+9$/month for 5GB of uploads  
+Free tier allows 5GB of uploads & adds watermarks to thumbnails
+
+[CloudConvert](https://cloudconvert.com/)  
+10€/month for 1000 uploads / 18€ once for 1000 credits  
+Free tier allows 10 thumbnails per day
+
+Transloadit supports a few more file formats and advanced customization. The most obvious
+difference is audio files: Transloadit can generate thumbnails from wave forms or embedded
+artwork, while CloudConvert does not support audio files at all.
 
 ## Quick Start
 
 1. Install using `composer require daun/statamic-asset-thumbnails`
 2. Configure the driver and credentials in `config/statamic/asset-thumbnails.php`
-3. Any supported files will automatically get a thumbnail in the control panel
-4. Recommended: set up a custom cache disk for faster thumbnail loading (see below for details)
+3. Install the required composer packages for your chosen driver:
+   - Transloadit: `composer require transloadit/php-sdk`
+   - CloudConvert: `composer require cloudconvert/cloudconvert-php`
+4. Any supported files will now automatically get a thumbnail in the control panel
+5. Recommended: set up a custom cache disk for faster thumbnail loading (see below for details)
+6. Recommended: disable thumbnail generation in local and development environments to save on conversion credits
 
 ## File Formats
 
-The Transloadit driver supports the following file formats:
+Both drivers support the following file formats:
 
 - **Image**: tiff, bmp
 - **Video**: mp4, mov, avi, mkv, webm, wmv
-- **Audio**: mp3, aac, aif, m4a, off, opus, flac, wav
-- **Raw Photo**: raw, dng, heic, heif, nef, nrw, cr2, cr3, crw
+- **Photo**: raw, dng, heic, heif, nef, cr2, cr3, crw
 - **Document**: pdf, doc, docx, ppt, pptx, xls, xlsx, rtf, txt
-- **Adobe**: psd, ai, eps
+- **Adobe**: psd, psb, eps
 
-## Commands
+Transloadit supports a few additional formats:
 
-You can clear the thumbnail cache using the following command:
-
-```bash
-php please thumbnails:clear
-```
+- **Audio**: mp3, aac, aif, m4a, off, opus, flac, wav
+- **Video**: h264
+- **Adobe**: ai
+- **Photo**: nrw, dcm
 
 ## Cache Disk
 
@@ -65,6 +78,14 @@ Then, update the cache disk in `config/statamic/asset-thumbnails.php`.
 -  'disk' => null,
 +  'disk' => 'thumbnails',
 ],
+```
+
+## Commands
+
+You can clear the thumbnail cache using the following command:
+
+```bash
+php please thumbnails:clear
 ```
 
 ## License

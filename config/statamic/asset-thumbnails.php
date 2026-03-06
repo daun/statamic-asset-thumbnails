@@ -10,16 +10,17 @@ return [
     | Choose the external service to use for generating asset thumbnails.
     | Set to `null` to disable automatic generation of thumbnails.
     |
-    | Each driver may require specific configuration options, which can be set
-    | in the sections below. Consult the readme for details.
+    | Each driver requires installation of a client SDK and specific configuration
+    | options that can be set in the sections below.
     |
     | Available drivers:
-    | - \Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver::class
+    | - `transloadit`
+    | - `cloudconvert`
     | - `null` (disable generation of new thumbnails)
     |
     */
 
-    'driver' => env('ASSET_THUMBNAILS_DRIVER', \Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver::class),
+    'driver' => env('ASSET_THUMBNAILS_DRIVER', 'transloadit'),
 
     /*
     |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ return [
     |
     | Settings for using the Transloadit service for thumbnail generation.
     |
+    | Install `transloadit/php-sdk` via composer to use this driver.
+    |
     */
 
     'transloadit' => [
@@ -35,6 +38,23 @@ return [
         'auth_key' => env('TRANSLOADIT_AUTH_KEY'),
 
         'auth_secret' => env('TRANSLOADIT_AUTH_SECRET'),
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | CloudConvert Driver
+    |--------------------------------------------------------------------------
+    |
+    | Settings for using the CloudConvert service for thumbnail generation.
+    |
+    | Install `cloudconvert/cloudconvert-php` via composer to use this driver.
+    |
+    */
+
+    'cloudconvert' => [
+
+        'api_key' => env('CLOUDCONVERT_API_KEY'),
 
     ],
 
