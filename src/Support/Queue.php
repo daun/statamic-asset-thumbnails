@@ -6,12 +6,12 @@ class Queue
 {
     public static function connection(): ?string
     {
-        return config('statamic-asset-thumbnails.queue.connection') ?? config('queue.default');
+        return config('statamic.asset-thumbnails.queue.connection') ?? config('queue.default');
     }
 
     public static function queue(): ?string
     {
-        return config('statamic-asset-thumbnails.queue.queue', 'default');
+        return config('statamic.asset-thumbnails.queue.queue') ?? 'default';
     }
 
     public static function isSync(): bool

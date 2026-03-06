@@ -6,17 +6,9 @@ use Statamic\Assets\Asset;
 
 abstract class AbstractDriver implements DriverInterface
 {
-    protected string $id;
-
     protected array $supportedExtensions;
 
-    /**
-     * The unique id of the driver.
-     */
-    public function id(): string
-    {
-        return $this->id;
-    }
+    public function __construct(array $config = []) {}
 
     /**
      * Check if the driver supports generating thumbnails for the given asset.

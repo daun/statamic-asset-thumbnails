@@ -8,9 +8,10 @@
 
 The addon generates control panel thumbnails for non-image files by integrating with a
 third-party file conversion service and caching the resulting image preview. Currently it
-supports the following service. Support for CloudConvert is planned.
+supports the following services:
 
 - [Transloadit](https://transloadit.com/): 9$/month, free tier available
+- [CloudConvert](https://cloudconvert.com/): 8€/month for 1000 thumbs, free tier available
 
 ## Quick Start
 
@@ -21,14 +22,20 @@ supports the following service. Support for CloudConvert is planned.
 
 ## File Formats
 
-The Transloadit driver supports the following file formats:
+Both drivers support the following file formats:
 
 - **Image**: tiff, bmp
 - **Video**: mp4, mov, avi, mkv, webm, wmv
-- **Audio**: mp3, aac, aif, m4a, off, opus, flac, wav
-- **Raw Photo**: raw, dng, heic, heif, nef, nrw, cr2, cr3, crw
+- **Photo**: raw, dng, heic, heif, nef, cr2, cr3, crw
 - **Document**: pdf, doc, docx, ppt, pptx, xls, xlsx, rtf, txt
-- **Adobe**: psd, ai, eps
+- **Adobe**: psd, psb, eps
+
+Transloadit supports a few additional formats:
+
+- **Audio**: mp3, aac, aif, m4a, off, opus, flac, wav
+- **Video**: h264
+- **Adobe**: ai
+- **Photo**: nrw, dcm
 
 ## Commands
 

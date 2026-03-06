@@ -2,23 +2,22 @@
 
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
-use Daun\StatamicAssetThumbnails\Drivers\Transloadit\GenerateThumbnailJob;
+use CloudConvert\CloudConvert;
+use Daun\StatamicAssetThumbnails\Drivers\CloudConvert\GenerateThumbnailJob;
 use Statamic\Assets\Asset;
-use transloadit\Transloadit;
 
-class TransloaditDriver extends AbstractDriver implements DriverInterface
+class CloudConvertDriver extends AbstractDriver implements DriverInterface
 {
-    protected Transloadit $api;
+    protected CloudConvert $api;
 
     public function __construct(array $config = [])
     {
-        $this->api = new Transloadit([
-            'key' => $config['auth_key'] ?? null,
-            'secret' => $config['auth_secret'] ?? null,
+        $this->api = new CloudConvert([
+            'api_key' => $config['api_key'] ?? null,
         ]);
     }
 
-    public function api(): Transloadit
+    public function api(): CloudConvert
     {
         return $this->api;
     }
@@ -36,7 +35,7 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
 
         // Adobe formats
         'eps',
-        'ai',
+        // 'ai', // (not supported)
         'psd',
         'psb',
 
@@ -45,7 +44,7 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
         'heic',
         'heif',
         'nef',
-        'nrw',
+        // 'nrw', // (not supported)
         'cr2',
         'cr3',
         'crw',
@@ -54,15 +53,15 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
         'arw',
         'rw2',
         'raf',
-        'dcm',
+        // 'dcm', // (not supported)
 
         // Icon formats
-        'cur',
+        // 'cur', // (not supported)
         'ico',
 
         // Video formats
         'mp4',
-        'h264',
+        // 'h264', // (not supported)
         'm4v',
         'mov',
         'avi',
@@ -71,16 +70,7 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
         'webm',
         'wmv',
 
-        // Audio formats
-        'mp3',
-        'aac',
-        'aif',
-        'aiff',
-        'm4a',
-        'ogg',
-        'opus',
-        'flac',
-        'wav',
+        // Audio formats (not supported)
 
         // Document formats
         'txt',
