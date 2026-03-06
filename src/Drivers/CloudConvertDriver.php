@@ -3,7 +3,8 @@
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
 use CloudConvert\CloudConvert;
-use Daun\StatamicAssetThumbnails\Drivers\CloudConvert\GenerateThumbnailJob;
+use CloudConvert\Models\Job;
+use CloudConvert\Models\Task;
 use Statamic\Assets\Asset;
 
 class CloudConvertDriver extends AbstractDriver implements DriverInterface
@@ -22,9 +23,63 @@ class CloudConvertDriver extends AbstractDriver implements DriverInterface
         return $this->api;
     }
 
-    public function generate(Asset $asset): void
+    public function createConversion(Asset $asset): ?string
     {
-        GenerateThumbnailJob::dispatch($asset)->afterResponse();
+        $job = (new Job)
+            ->addTask(new Task('import/upload', 'upload-task'))
+            ->addTask(
+                (new Task('thumbnail', 'thumbnail-task'))
+                    ->set('input', 'upload-task')
+                    ->set('timeout', 15)
+                    ->set('output_format', 'webp')
+                    ->set('width', 500)
+                    ->set('height', 500)
+                    ->set('fit', 'max')
+            )
+            ->addTask(
+                (new Task('export/url', 'export-task'))
+                    ->set('input', 'thumbnail-task')
+            );
+
+        $job = $this->api->jobs()->create($job);
+
+        $uploadTask = $job->getTasks()?->whereName('upload-task')[0];
+
+        $this->api->tasks()->upload($uploadTask, fopen($asset->resolvedPath(), 'r'), $asset->basename());
+
+        return $job->getId();
+    }
+
+    public function fetchResult(string $conversionId): ConversionResult|ConversionStatus
+    {
+        try {
+            $job = $this->api->jobs()->get($conversionId);
+        } catch (\Throwable) {
+            return ConversionStatus::Pending;
+        }
+
+        if (in_array($job->getStatus(), [Job::STATUS_PROCESSING, Job::STATUS_WATING])) {
+            return ConversionStatus::Pending;
+        }
+
+        if ($job->getStatus() === Job::STATUS_ERROR) {
+            return ConversionStatus::Failed;
+        }
+
+        if ($job->getStatus() === Job::STATUS_FINISHED) {
+            $exports = $job->getTasks()?->operation('export/url')?->status(Task::STATUS_FINISHED) ?? [];
+
+            if (count($exports)) {
+                $result = $exports[0]->getResult()?->files[0] ?? null;
+                $url = $result->url ?? null;
+                $filename = $result->filename ?? null;
+                if ($url && $filename) {
+                    return new ConversionResult($url, $filename);
+                }
+            }
+        }
+
+        return ConversionStatus::Failed;
     }
 
     protected array $supportedExtensions = [
