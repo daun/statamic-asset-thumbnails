@@ -30,6 +30,6 @@ class ThumbnailController extends CpController
 
         $this->service->generate($asset);
 
-        return redirect('https://placehold.co/600?text=Generating\nPreview&font=raleway', 302);
+        return redirect('/vendor/daun/statamic-asset-thumbnails/icons/placeholder.svg', 302);
     }
 }
