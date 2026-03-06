@@ -34,14 +34,6 @@ class ServiceProvider extends AddonServiceProvider
     {
         $this->app->singleton(ThumbnailService::class);
 
-        $this->app->singleton(TransloaditDriver::class, function () {
-            return new TransloaditDriver(config('statamic.asset-thumbnails.transloadit', []));
-        });
-
-        $this->app->singleton(CloudConvertDriver::class, function () {
-            return new CloudConvertDriver(config('statamic.asset-thumbnails.cloudconvert', []));
-        });
-
         $this->app->singleton(NullDriver::class, function () {
             return new NullDriver;
         });
@@ -50,12 +42,23 @@ class ServiceProvider extends AddonServiceProvider
             $driver = config('statamic.asset-thumbnails.driver', 'transloadit');
 
             return match ($driver) {
-                'transloadit', TransloaditDriver::class => app(TransloaditDriver::class),
-                'cloudconvert', CloudConvertDriver::class => app(CloudConvertDriver::class),
-                null, 'null', NullDriver::class => app(NullDriver::class),
+                'transloadit' => $this->resolveDriver('transloadit', TransloaditDriver::class, 'transloadit\\Transloadit', 'transloadit/php-sdk'),
+                'cloudconvert' => $this->resolveDriver('cloudconvert', CloudConvertDriver::class, 'CloudConvert\\CloudConvert', 'cloudconvert/cloudconvert-php'),
+                null, 'null' => app(NullDriver::class),
                 default => throw new \RuntimeException("Unsupported asset thumbnail driver [$driver]."),
             };
         });
+    }
+
+    protected function resolveDriver(string $name, string $driverClass, string $sdkClass, string $package): DriverInterface
+    {
+        if (! class_exists($sdkClass)) {
+            throw new \RuntimeException(
+                "The [{$name}] driver requires the [{$package}] package. Install it with: composer require {$package}"
+            );
+        }
+
+        return new $driverClass(config("statamic.asset-thumbnails.{$name}", []));
     }
 
     public function bootAddon(): void
