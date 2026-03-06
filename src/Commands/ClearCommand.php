@@ -16,11 +16,8 @@ class ClearCommand extends Command
 
     public function handle(ThumbnailService $service): void
     {
-        $dirs = $service->disk()->directories();
-        foreach ($dirs as $dir) {
-            $service->disk()->deleteDirectory($dir);
-        }
+        $count = $service->removeAll();
 
-        $this->info(sprintf('Cleared thumbnails for %d assets', count($dirs)));
+        $this->info(sprintf('Cleared thumbnails for %d assets', $count));
     }
 }

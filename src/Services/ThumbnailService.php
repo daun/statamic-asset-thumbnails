@@ -131,6 +131,16 @@ class ThumbnailService
             : false;
     }
 
+    public function removeAll(): int
+    {
+        $dirs = $this->disk()->directories();
+        foreach ($this->disk()->directories() as $dir) {
+            $this->disk()->deleteDirectory($dir);
+        }
+
+        return count($dirs);
+    }
+
     /**
      * Download file contents from a URL.
      *
