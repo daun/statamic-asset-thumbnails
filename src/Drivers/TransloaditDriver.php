@@ -39,23 +39,23 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
         return $response->data['assembly_id'] ?? null;
     }
 
-    public function fetchResult(string $conversionId): ConversionResult|false|null
+    public function fetchResult(string $conversionId): ConversionResult|ConversionStatus
     {
         $response = $this->api->getAssembly($conversionId);
         $assembly = ($response->data['ok'] ?? null) ? $response->data : null;
 
         if (! $assembly) {
-            return null;
+            return ConversionStatus::Pending;
         }
 
         $status = $assembly['ok'] ?? null;
 
         if (in_array($status, ['ASSEMBLY_EXECUTING', 'ASSEMBLY_UPLOADING'])) {
-            return null;
+            return ConversionStatus::Pending;
         }
 
         if (in_array($status, ['ASSEMBLY_CANCELED', 'REQUEST_ABORTED'])) {
-            return false;
+            return ConversionStatus::Failed;
         }
 
         if ($status === 'ASSEMBLY_COMPLETED') {
@@ -69,7 +69,7 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
             }
         }
 
-        return false;
+        return ConversionStatus::Failed;
     }
 
     protected function getFilePreviewRobotOptions(Asset $asset): array

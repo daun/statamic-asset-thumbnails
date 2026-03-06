@@ -1,6 +1,7 @@
 <?php
 
 use Daun\StatamicAssetThumbnails\Drivers\ConversionResult;
+use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
 use Tests\Concerns\FakesTransloadit;
 use Tests\Support\TransloaditResponseFactory;
 
@@ -38,20 +39,20 @@ test('polls Transloadit API for assembly status', function () {
     $this->assertGetAssemblyCalled('assembly-123');
 });
 
-test('returns null when assembly is still executing', function () {
+test('returns Pending when assembly is still executing', function () {
     $this->mockGetAssembly(TransloaditResponseFactory::assemblyExecuting());
 
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
-    expect($result)->toBeNull();
+    expect($result)->toBe(ConversionStatus::Pending);
 });
 
-test('returns null when assembly is still uploading', function () {
+test('returns Pending when assembly is still uploading', function () {
     $this->mockGetAssembly(TransloaditResponseFactory::assemblyUploading());
 
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
-    expect($result)->toBeNull();
+    expect($result)->toBe(ConversionStatus::Pending);
 });
 
 test('returns ConversionResult when assembly completes successfully', function () {
@@ -71,28 +72,28 @@ test('returns ConversionResult when assembly completes successfully', function (
     expect($result->filename)->toBe('thumb.jpg');
 });
 
-test('returns false when assembly is canceled', function () {
+test('returns Failed when assembly is canceled', function () {
     $this->mockGetAssembly(TransloaditResponseFactory::assemblyCanceled());
 
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
-    expect($result)->toBeFalse();
+    expect($result)->toBe(ConversionStatus::Failed);
 });
 
-test('returns false when request is aborted', function () {
+test('returns Failed when request is aborted', function () {
     $this->mockGetAssembly(TransloaditResponseFactory::assemblyAborted());
 
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
-    expect($result)->toBeFalse();
+    expect($result)->toBe(ConversionStatus::Failed);
 });
 
-test('returns null when API returns error response', function () {
+test('returns Pending when API returns error response', function () {
     $this->mockGetAssembly(TransloaditResponseFactory::apiError());
 
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
-    expect($result)->toBeNull();
+    expect($result)->toBe(ConversionStatus::Pending);
 });
 
 test('records all API interactions for debugging', function () {

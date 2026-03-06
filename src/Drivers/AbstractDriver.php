@@ -36,5 +36,5 @@ abstract class AbstractDriver implements DriverInterface
     /**
      * Fetch the result of a previously created conversion.
      */
-    abstract public function fetchResult(string $conversionId): ConversionResult|false|null;
+    abstract public function fetchResult(string $conversionId): ConversionResult|ConversionStatus;
 }

@@ -3,6 +3,7 @@
 namespace Daun\StatamicAssetThumbnails\Jobs;
 
 use Daun\StatamicAssetThumbnails\Drivers\ConversionResult;
+use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
 use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use Daun\StatamicAssetThumbnails\Services\ThumbnailService;
 use Daun\StatamicAssetThumbnails\Support\Queue;
@@ -42,19 +43,16 @@ class FetchConversionJob implements ShouldQueue
 
         $result = $driver->fetchResult($this->conversionId);
 
-        // Still processing → retry
-        if ($result === null) {
+        if ($result === ConversionStatus::Pending) {
             $this->retry();
 
             return;
         }
 
-        // Failed → don't retry
-        if ($result === false) {
+        if ($result === ConversionStatus::Failed) {
             return;
         }
 
-        // Completed → download and save
         if ($result instanceof ConversionResult) {
             if ($contents = $service->download($result->url)) {
                 $service->put($this->asset, $contents, $result->filename);

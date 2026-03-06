@@ -1,6 +1,7 @@
 <?php
 
 use Daun\StatamicAssetThumbnails\Drivers\ConversionResult;
+use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
 use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use Daun\StatamicAssetThumbnails\Jobs\CreateConversionJob;
 use Daun\StatamicAssetThumbnails\Jobs\FetchConversionJob;
@@ -98,7 +99,7 @@ test('CreateConversionJob skips if thumbnail already exists', function () {
 test('FetchConversionJob calls driver fetchResult', function () {
     Bus::fake([FetchConversionJob::class]);
 
-    $this->fakeDriver->fakeResult = null; // still processing
+    $this->fakeDriver->fakeResult = ConversionStatus::Pending;
 
     $asset = $this->uploadTestFileToTestContainer('test.txt', 'document.pdf');
 
@@ -108,10 +109,10 @@ test('FetchConversionJob calls driver fetchResult', function () {
     $this->fakeDriver->assertResultFetched('conv-123');
 });
 
-test('FetchConversionJob retries when result is null', function () {
+test('FetchConversionJob retries when result is Pending', function () {
     Bus::fake([FetchConversionJob::class]);
 
-    $this->fakeDriver->fakeResult = null; // still processing
+    $this->fakeDriver->fakeResult = ConversionStatus::Pending;
 
     $asset = $this->uploadTestFileToTestContainer('test.txt', 'document.pdf');
 
@@ -122,10 +123,10 @@ test('FetchConversionJob retries when result is null', function () {
     Bus::assertDispatched(FetchConversionJob::class);
 });
 
-test('FetchConversionJob does not retry when result is false (failed)', function () {
+test('FetchConversionJob does not retry when result is Failed', function () {
     Bus::fake([FetchConversionJob::class]);
 
-    $this->fakeDriver->fakeResult = false; // failed
+    $this->fakeDriver->fakeResult = ConversionStatus::Failed;
 
     $asset = $this->uploadTestFileToTestContainer('test.txt', 'document.pdf');
 
@@ -192,7 +193,7 @@ test('FetchConversionJob skips if thumbnail already exists', function () {
 test('FetchConversionJob stops after max attempts', function () {
     Bus::fake([FetchConversionJob::class]);
 
-    $this->fakeDriver->fakeResult = null; // still processing
+    $this->fakeDriver->fakeResult = ConversionStatus::Pending;
 
     $asset = $this->uploadTestFileToTestContainer('test.txt', 'document.pdf');
 

@@ -30,9 +30,9 @@ interface DriverInterface
      * Fetch the result of a previously created conversion.
      *
      * Returns:
-     * - ConversionResult: the conversion completed successfully
-     * - null: still processing, caller should retry
-     * - false: failed permanently, caller should not retry
+     * - ConversionResult: the conversion completed successfully with a downloadable file
+     * - ConversionStatus::Pending: still processing, caller should retry
+     * - ConversionStatus::Failed: failed permanently, caller should not retry
      */
-    public function fetchResult(string $conversionId): ConversionResult|false|null;
+    public function fetchResult(string $conversionId): ConversionResult|ConversionStatus;
 }

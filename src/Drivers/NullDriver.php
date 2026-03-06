@@ -13,9 +13,9 @@ class NullDriver extends AbstractDriver implements DriverInterface
         return null;
     }
 
-    public function fetchResult(string $conversionId): ConversionResult|false|null
+    public function fetchResult(string $conversionId): ConversionResult|ConversionStatus
     {
-        return false;
+        return ConversionStatus::Failed;
     }
 
     protected array $supportedExtensions = [];

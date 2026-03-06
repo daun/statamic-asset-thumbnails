@@ -1,6 +1,7 @@
 <?php
 
 use Daun\StatamicAssetThumbnails\Drivers\ConversionResult;
+use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
 use Tests\Concerns\FakesCloudConvert;
 use Tests\Support\CloudConvertResponseFactory;
 
@@ -36,12 +37,12 @@ test('polls CloudConvert API for job status', function () {
     $this->mockHttpClient->assertRequestMade('/v2/jobs/job-123', 'GET');
 });
 
-test('returns null when job is still processing', function () {
+test('returns Pending when job is still processing', function () {
     $this->mockHttpClient->addResponse(CloudConvertResponseFactory::jobProcessing());
 
     $result = $this->cloudConvertDriver->fetchResult('job-123');
 
-    expect($result)->toBeNull();
+    expect($result)->toBe(ConversionStatus::Pending);
 });
 
 test('returns ConversionResult when job finishes successfully', function () {
@@ -61,12 +62,12 @@ test('returns ConversionResult when job finishes successfully', function () {
     expect($result->filename)->toBe('thumb.webp');
 });
 
-test('returns false when job has errored', function () {
+test('returns Failed when job has errored', function () {
     $this->mockHttpClient->addResponse(CloudConvertResponseFactory::jobError());
 
     $result = $this->cloudConvertDriver->fetchResult('job-123');
 
-    expect($result)->toBeFalse();
+    expect($result)->toBe(ConversionStatus::Failed);
 });
 
 test('sends authorization header when polling job status', function () {
@@ -93,7 +94,7 @@ test('records all HTTP interactions for debugging', function () {
     }
 });
 
-test('returns null on API exception to allow retry', function () {
+test('returns Pending on API exception to allow retry', function () {
     // Queue no responses — the mock will return an empty 200 with "{}" body
     // The SDK hydrator will fail, triggering the catch block in fetchResult()
     $this->mockHttpClient->setDefaultResponse(
@@ -102,5 +103,5 @@ test('returns null on API exception to allow retry', function () {
 
     $result = $this->cloudConvertDriver->fetchResult('job-123');
 
-    expect($result)->toBeNull();
+    expect($result)->toBe(ConversionStatus::Pending);
 });

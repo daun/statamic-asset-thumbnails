@@ -50,20 +50,20 @@ class CloudConvertDriver extends AbstractDriver implements DriverInterface
         return $job->getId();
     }
 
-    public function fetchResult(string $conversionId): ConversionResult|false|null
+    public function fetchResult(string $conversionId): ConversionResult|ConversionStatus
     {
         try {
             $job = $this->api->jobs()->get($conversionId);
         } catch (\Throwable) {
-            return null;
+            return ConversionStatus::Pending;
         }
 
         if (in_array($job->getStatus(), [Job::STATUS_PROCESSING, Job::STATUS_WATING])) {
-            return null;
+            return ConversionStatus::Pending;
         }
 
         if ($job->getStatus() === Job::STATUS_ERROR) {
-            return false;
+            return ConversionStatus::Failed;
         }
 
         if ($job->getStatus() === Job::STATUS_FINISHED) {
@@ -79,7 +79,7 @@ class CloudConvertDriver extends AbstractDriver implements DriverInterface
             }
         }
 
-        return false;
+        return ConversionStatus::Failed;
     }
 
     protected array $supportedExtensions = [

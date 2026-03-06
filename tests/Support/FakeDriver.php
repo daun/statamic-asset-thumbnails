@@ -4,6 +4,7 @@ namespace Tests\Support;
 
 use Daun\StatamicAssetThumbnails\Drivers\AbstractDriver;
 use Daun\StatamicAssetThumbnails\Drivers\ConversionResult;
+use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
 use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use PHPUnit\Framework\Assert;
 use Statamic\Assets\Asset;
@@ -26,9 +27,10 @@ class FakeDriver extends AbstractDriver implements DriverInterface
 
     /**
      * The result to return from fetchResult().
-     * Set to ConversionResult for success, null for "still processing", false for "failed".
+     * Set to ConversionResult for success, ConversionStatus::Pending for "still processing",
+     * ConversionStatus::Failed for "failed".
      */
-    public ConversionResult|false|null $fakeResult = null;
+    public ConversionResult|ConversionStatus $fakeResult = ConversionStatus::Pending;
 
     protected array $supportedExtensions = [
         'bmp', 'tif', 'tiff',
@@ -51,7 +53,7 @@ class FakeDriver extends AbstractDriver implements DriverInterface
         return $this->fakeConversionId;
     }
 
-    public function fetchResult(string $conversionId): ConversionResult|false|null
+    public function fetchResult(string $conversionId): ConversionResult|ConversionStatus
     {
         $this->fetchedConversions[] = $conversionId;
 

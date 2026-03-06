@@ -2,6 +2,7 @@
 
 use Daun\StatamicAssetThumbnails\Drivers\CloudConvertDriver;
 use Daun\StatamicAssetThumbnails\Drivers\ConversionResult;
+use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
 use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use Daun\StatamicAssetThumbnails\Drivers\NullDriver;
 use Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver;
@@ -194,21 +195,21 @@ test('FakeDriver records created conversions', function () {
 |--------------------------------------------------------------------------
 */
 
-test('NullDriver fetchResult() returns false', function () {
+test('NullDriver fetchResult() returns Failed', function () {
     $driver = new NullDriver;
 
-    expect($driver->fetchResult('any-id'))->toBeFalse();
+    expect($driver->fetchResult('any-id'))->toBe(ConversionStatus::Failed);
 });
 
 test('FakeDriver fetchResult() returns configurable result', function () {
     $driver = new FakeDriver;
 
-    // Default: null (still processing)
-    expect($driver->fetchResult('conv-1'))->toBeNull();
+    // Default: Pending (still processing)
+    expect($driver->fetchResult('conv-1'))->toBe(ConversionStatus::Pending);
 
-    // Set to false (failed)
-    $driver->fakeResult = false;
-    expect($driver->fetchResult('conv-2'))->toBeFalse();
+    // Set to Failed
+    $driver->fakeResult = ConversionStatus::Failed;
+    expect($driver->fetchResult('conv-2'))->toBe(ConversionStatus::Failed);
 
     // Set to ConversionResult (succeeded)
     $driver->fakeResult = new ConversionResult('https://example.com/thumb.webp', 'thumb.webp');
