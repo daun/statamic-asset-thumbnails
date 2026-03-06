@@ -29,8 +29,7 @@ class CreateConversionJob implements ShouldQueue
             return;
         }
 
-        $conversionId = $driver->createConversion($this->asset);
-        if ($conversionId) {
+        if ($conversionId = $driver->createConversion($this->asset)) {
             FetchConversionJob::dispatch($this->asset, $conversionId)->delay(now()->addSeconds(2));
         }
     }
