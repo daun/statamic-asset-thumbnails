@@ -4,6 +4,7 @@
 
 - Add CloudConvert driver
 - Authorize controller route
+- Avoid placeholder thumbnail being blocked by ad blockers
 - Extend test coverage
 
 ## [1.0.0] - 2026-02-08

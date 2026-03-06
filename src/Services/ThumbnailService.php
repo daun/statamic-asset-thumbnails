@@ -59,7 +59,7 @@ class ThumbnailService
             return;
         }
 
-        Cache::put($this->mutex($asset), true, now()->addMinutes(2));
+        Cache::put($this->mutex($asset), true, now()->addMinutes(1));
 
         $this->driver()->generate($asset);
     }
@@ -131,6 +131,16 @@ class ThumbnailService
             : false;
     }
 
+    public function removeAll(): int
+    {
+        $dirs = $this->disk()->directories();
+        foreach ($this->disk()->directories() as $dir) {
+            $this->disk()->deleteDirectory($dir);
+        }
+
+        return count($dirs);
+    }
+
     /**
      * Download file contents from a URL.
      *
@@ -166,6 +176,7 @@ class ThumbnailService
 
     protected function defaultCacheDisk(): FilesystemAdapter
     {
+        /** @var FilesystemAdapter */
         return Storage::createLocalDriver([
             'driver' => 'local',
             'root' => storage_path('statamic/addons/asset-thumbnails'),

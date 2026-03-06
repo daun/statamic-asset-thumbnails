@@ -62,8 +62,8 @@ class FetchConversionJob implements ShouldQueue
 
     protected function retry(): void
     {
-        // Very simple backoff strategy: wait 0, 1, 2, 3... seconds
-        $wait = $this->attempt - 1;
+        // Very simple backoff strategy: wait 1, 2, 3, 4... seconds
+        $wait = $this->attempt;
 
         // Sync queue cannot delay jobs, so we need to sleep manually
         if (Queue::isSync()) {

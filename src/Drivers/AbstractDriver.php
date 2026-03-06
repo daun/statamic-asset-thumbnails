@@ -3,13 +3,15 @@
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
 use Daun\StatamicAssetThumbnails\Jobs\CreateConversionJob;
+use Daun\StatamicAssetThumbnails\Support\Queue;
 use Statamic\Assets\Asset;
 
 abstract class AbstractDriver implements DriverInterface
 {
     protected array $supportedExtensions;
 
-    public function __construct(array $config = []) {}
+    /** @param array<string, mixed> $config */
+    public function __construct(protected array $config = []) {}
 
     /**
      * Check if the driver supports generating thumbnails for the given asset.
@@ -25,7 +27,11 @@ abstract class AbstractDriver implements DriverInterface
      */
     public function generate(Asset $asset): void
     {
-        CreateConversionJob::dispatch($asset)->afterResponse();
+        if (Queue::isSync()) {
+            CreateConversionJob::dispatch($asset)->afterResponse();
+        } else {
+            CreateConversionJob::dispatch($asset);
+        }
     }
 
     /**
