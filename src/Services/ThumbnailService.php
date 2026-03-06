@@ -59,7 +59,7 @@ class ThumbnailService
             return;
         }
 
-        Cache::put($this->mutex($asset), true, now()->addMinutes(2));
+        Cache::put($this->mutex($asset), true, now()->addMinutes(1));
 
         $this->driver()->generate($asset);
     }
