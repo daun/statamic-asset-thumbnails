@@ -30,6 +30,6 @@ class ThumbnailController extends CpController
 
         $this->service->generate($asset);
 
-        return redirect('/vendor/daun/statamic-asset-thumbnails/icons/placeholder.svg', 302);
+        return redirect('/vendor/statamic-asset-thumbnails/icons/placeholder.svg', 302);
     }
 }
