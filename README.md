@@ -7,11 +7,21 @@
 ## How It Works
 
 The addon generates control panel thumbnails for non-image files by integrating with a
-third-party file conversion service and caching the resulting image preview. Currently it
-supports the following services:
+third-party file conversion service and download the resulting preview image.
 
-- [Transloadit](https://transloadit.com/): 9$/month, free tier available
-- [CloudConvert](https://cloudconvert.com/): 8€/month for 1000 thumbs, free tier available
+## File Conversion Services
+
+[Transloadit](https://transloadit.com/)  
+9$/month for 5GB of uploads  
+Free tier allows 5GB of uploads & adds watermarks to thumbnails
+
+[CloudConvert](https://cloudconvert.com/)  
+10€/month for 1000 uploads / 18€ once for 1000 credits  
+Free tier allows 10 thumbnails per day
+
+Transloadit supports a few more file formats and advanced customization. The most obvious
+difference is audio files: Transloadit can generate thumbnails from wave forms or embedded
+artwork, while CloudConvert does not support audio files at all.
 
 ## Quick Start
 
@@ -36,14 +46,6 @@ Transloadit supports a few additional formats:
 - **Video**: h264
 - **Adobe**: ai
 - **Photo**: nrw, dcm
-
-## Commands
-
-You can clear the thumbnail cache using the following command:
-
-```bash
-php please thumbnails:clear
-```
 
 ## Cache Disk
 
@@ -72,6 +74,14 @@ Then, update the cache disk in `config/statamic/asset-thumbnails.php`.
 -  'disk' => null,
 +  'disk' => 'thumbnails',
 ],
+```
+
+## Commands
+
+You can clear the thumbnail cache using the following command:
+
+```bash
+php please thumbnails:clear
 ```
 
 ## License
