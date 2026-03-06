@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2026-03-06
+
+- Add CloudConvert driver
+- Authorize controller route
+- Extend test coverage
+
 ## [1.0.0] - 2026-02-08
 
 - Show preview in asset edit form
@@ -20,6 +26,7 @@
 
 - Initial release
 
+[1.1.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.1.0
 [1.0.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.0.0
 [0.2.1]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/0.2.1
 [0.2.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/0.2.0

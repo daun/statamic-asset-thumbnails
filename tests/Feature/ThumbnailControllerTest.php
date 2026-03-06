@@ -45,11 +45,24 @@ it('404s when the asset doesnt exist', function () {
         ->assertNotFound();
 });
 
-it('redirects to placeholder', function () {
+it('redirects to placeholder at root url', function () {
+    config(['app.asset_url' => null, 'app.url' => 'http://localhost']);
+
     $this->setTestRoles(['test' => ['access cp', 'view test assets']]);
     $user = User::make()->assignRole('test')->save();
 
     $this->actingAs($user)
         ->get('/cp/addons/asset-thumbnails/'.base64_encode('test::one.png'))
-        ->assertRedirect('https://placehold.co/600?text=Generating\nPreview&font=raleway');
+        ->assertRedirect('http://localhost/vendor/statamic-asset-thumbnails/icons/placeholder.svg');
+});
+
+it('redirects to placeholder at custom asset url', function () {
+    app('url')->useAssetOrigin('https://cdn.example.com/assets');
+
+    $this->setTestRoles(['test' => ['access cp', 'view test assets']]);
+    $user = User::make()->assignRole('test')->save();
+
+    $this->actingAs($user)
+        ->get('/cp/addons/asset-thumbnails/'.base64_encode('test::one.png'))
+        ->assertRedirect('https://cdn.example.com/assets/vendor/statamic-asset-thumbnails/icons/placeholder.svg');
 });
