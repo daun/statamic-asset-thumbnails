@@ -11,7 +11,7 @@ class CloudConvertDriver extends AbstractDriver implements DriverInterface
 {
     protected CloudConvert $api;
 
-    public function __construct(array $config = [])
+    public function __construct(protected array $config = [])
     {
         $this->api = new CloudConvert([
             'api_key' => $config['api_key'] ?? null,

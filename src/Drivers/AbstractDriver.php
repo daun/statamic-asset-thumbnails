@@ -10,9 +10,8 @@ abstract class AbstractDriver implements DriverInterface
     protected array $supportedExtensions;
 
     /** @param array<string, mixed> $config */
-    public function __construct(array $config = []) // @phpstan-ignore constructor.unusedParameter
+    public function __construct(protected array $config = [])
     {
-        // Subclasses may use $config to initialize their API clients
     }
 
     /**

@@ -9,7 +9,7 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
 {
     protected Transloadit $api;
 
-    public function __construct(array $config = [])
+    public function __construct(protected array $config = [])
     {
         $this->api = new Transloadit([
             'key' => $config['auth_key'] ?? null,
