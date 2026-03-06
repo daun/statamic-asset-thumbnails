@@ -30,6 +30,10 @@ class ServiceProvider extends AddonServiceProvider
         AssetDeleted::class => [ClearThumbnail::class],
     ];
 
+    protected $publishables = [
+        __DIR__.'/../resources/icons' => 'icons',
+    ];
+
     public function register()
     {
         $this->app->singleton(ThumbnailService::class);
