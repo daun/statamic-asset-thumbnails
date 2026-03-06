@@ -10,8 +10,8 @@ return [
     | Choose the external service to use for generating asset thumbnails.
     | Set to `null` to disable automatic generation of thumbnails.
     |
-    | Each driver may require specific configuration options, which can be set
-    | in the sections below. Consult the readme for details.
+    | Each driver requires installation of a client SDK and specific configuration
+    | options that can be set in the sections below.
     |
     | Available drivers:
     | - `transloadit`
@@ -29,6 +29,8 @@ return [
     |
     | Settings for using the Transloadit service for thumbnail generation.
     |
+    | Install `transloadit/php-sdk` via composer to use this driver.
+    |
     */
 
     'transloadit' => [
@@ -45,6 +47,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Settings for using the CloudConvert service for thumbnail generation.
+    |
+    | Install `cloudconvert/cloudconvert-php` via composer to use this driver.
     |
     */
 

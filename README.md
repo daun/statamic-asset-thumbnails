@@ -27,8 +27,12 @@ artwork, while CloudConvert does not support audio files at all.
 
 1. Install using `composer require daun/statamic-asset-thumbnails`
 2. Configure the driver and credentials in `config/statamic/asset-thumbnails.php`
-3. Any supported files will automatically get a thumbnail in the control panel
-4. Recommended: set up a custom cache disk for faster thumbnail loading (see below for details)
+3. Install the required composer packages for your chosen driver:
+   - Transloadit: `composer require transloadit/php-sdk`
+   - CloudConvert: `composer require cloudconvert/cloudconvert-php`
+4. Any supported files will now automatically get a thumbnail in the control panel
+5. Recommended: set up a custom cache disk for faster thumbnail loading (see below for details)
+6. Recommended: disable thumbnail generation in local and development environments to save on conversion credits
 
 ## File Formats
 
