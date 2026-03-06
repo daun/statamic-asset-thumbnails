@@ -3,6 +3,7 @@
 namespace Daun\StatamicAssetThumbnails\Http\Controllers\Cp;
 
 use Daun\StatamicAssetThumbnails\Services\ThumbnailService;
+use Statamic\Assets\Asset;
 use Statamic\Facades\Asset as Assets;
 use Statamic\Http\Controllers\CP\CpController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ class ThumbnailController extends CpController
     public function show(string $id): Response
     {
         $asset = Assets::findById(base64_decode($id));
-        abort_unless($asset, 404);
+        abort_unless($asset instanceof Asset, 404);
 
         $this->authorize('view', $asset);
 

@@ -94,7 +94,7 @@ class ServiceProvider extends AddonServiceProvider
     {
         // Asset resource = opened in asset editor or linked in asset field
         AssetResource::hook('asset', function ($payload, $next) {
-            $payload->data->thumbnail ??= $thumbnail = app(ThumbnailService::class)->url($this->resource);
+            $payload->data->thumbnail ??= $thumbnail = app(ThumbnailService::class)->url($this->resource); // @phpstan-ignore property.notFound
             $payload->data->preview ??= $thumbnail ?? null;
 
             return $next($payload);
@@ -102,7 +102,7 @@ class ServiceProvider extends AddonServiceProvider
 
         // Folder asset resource = listed in asset browser
         FolderAssetResource::hook('asset', function ($payload, $next) {
-            $payload->data->thumbnail ??= app(ThumbnailService::class)->url($this->resource);
+            $payload->data->thumbnail ??= app(ThumbnailService::class)->url($this->resource); // @phpstan-ignore property.notFound
 
             return $next($payload);
         });

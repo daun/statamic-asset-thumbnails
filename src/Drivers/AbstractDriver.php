@@ -9,7 +9,11 @@ abstract class AbstractDriver implements DriverInterface
 {
     protected array $supportedExtensions;
 
-    public function __construct(array $config = []) {}
+    /** @param array<string, mixed> $config */
+    public function __construct(array $config = []) // @phpstan-ignore constructor.unusedParameter
+    {
+        // Subclasses may use $config to initialize their API clients
+    }
 
     /**
      * Check if the driver supports generating thumbnails for the given asset.

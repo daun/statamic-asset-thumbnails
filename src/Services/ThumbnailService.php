@@ -166,6 +166,7 @@ class ThumbnailService
 
     protected function defaultCacheDisk(): FilesystemAdapter
     {
+        /** @var FilesystemAdapter */
         return Storage::createLocalDriver([
             'driver' => 'local',
             'root' => storage_path('statamic/addons/asset-thumbnails'),
