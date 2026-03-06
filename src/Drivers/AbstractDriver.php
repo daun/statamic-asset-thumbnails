@@ -2,6 +2,7 @@
 
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
+use Daun\StatamicAssetThumbnails\Jobs\CreateConversionJob;
 use Statamic\Assets\Asset;
 
 abstract class AbstractDriver implements DriverInterface
@@ -22,5 +23,18 @@ abstract class AbstractDriver implements DriverInterface
     /**
      * Dispatch a job to generate a thumbnail for the given asset.
      */
-    abstract public function generate(Asset $asset): void;
+    public function generate(Asset $asset): void
+    {
+        CreateConversionJob::dispatch($asset)->afterResponse();
+    }
+
+    /**
+     * Create a conversion job on the external service.
+     */
+    abstract public function createConversion(Asset $asset): ?string;
+
+    /**
+     * Fetch the result of a previously created conversion.
+     */
+    abstract public function fetchResult(string $conversionId): ConversionResult|false|null;
 }
