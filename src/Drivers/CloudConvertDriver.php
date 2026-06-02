@@ -3,6 +3,7 @@
 namespace Daun\StatamicAssetThumbnails\Drivers;
 
 use CloudConvert\CloudConvert;
+use CloudConvert\Exceptions\HttpClientException;
 use CloudConvert\Models\Job;
 use CloudConvert\Models\Task;
 use Statamic\Assets\Asset;
@@ -54,7 +55,11 @@ class CloudConvertDriver extends AbstractDriver implements DriverInterface
     {
         try {
             $job = $this->api->jobs()->get($conversionId);
+        } catch (HttpClientException $e) {
+            // Permanent client errors (401, 403, 404, etc.) → fail the job
+            throw $e;
         } catch (\Throwable) {
+            // Transient errors (network, 5xx, unexpected) → retry
             return ConversionStatus::Pending;
         }
 
