@@ -1,5 +1,7 @@
 <?php
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Tests\Concerns\FakesCloudConvert;
 use Tests\Support\CloudConvertResponseFactory;
 
@@ -117,7 +119,7 @@ test('records all HTTP interactions for debugging', function () {
 
     foreach ($recorded as $interaction) {
         expect($interaction)->toHaveKeys(['request', 'response']);
-        expect($interaction['request'])->toBeInstanceOf(\Psr\Http\Message\RequestInterface::class);
-        expect($interaction['response'])->toBeInstanceOf(\Psr\Http\Message\ResponseInterface::class);
+        expect($interaction['request'])->toBeInstanceOf(RequestInterface::class);
+        expect($interaction['response'])->toBeInstanceOf(ResponseInterface::class);
     }
 });

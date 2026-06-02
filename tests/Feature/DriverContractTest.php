@@ -27,7 +27,7 @@ function createDriver(string $class): DriverInterface
         NullDriver::class => new NullDriver,
         CloudConvertDriver::class => new CloudConvertDriver(['api_key' => 'test-key']),
         TransloaditDriver::class => new TransloaditDriver(['auth_key' => 'test-key', 'auth_secret' => 'test-secret']),
-        default => throw new \RuntimeException("Unknown driver class: {$class}"),
+        default => throw new RuntimeException("Unknown driver class: {$class}"),
     };
 }
 

@@ -3,6 +3,7 @@
 namespace Tests\Support;
 
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Assert;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -138,7 +139,7 @@ class MockHttpClient implements ClientInterface
      */
     public function assertRequestCount(int $expected): void
     {
-        \PHPUnit\Framework\Assert::assertCount(
+        Assert::assertCount(
             $expected,
             $this->recorded,
             "Expected {$expected} HTTP request(s), but {$this->requestCount()} were recorded."
@@ -159,7 +160,7 @@ class MockHttpClient implements ClientInterface
         });
 
         $methodStr = $method ? " {$method}" : '';
-        \PHPUnit\Framework\Assert::assertTrue(
+        Assert::assertTrue(
             $found,
             "Expected an HTTP{$methodStr} request to URL containing [{$urlSubstring}], but none was recorded."
         );
@@ -170,7 +171,7 @@ class MockHttpClient implements ClientInterface
      */
     public function assertNoRequestsMade(): void
     {
-        \PHPUnit\Framework\Assert::assertEmpty(
+        Assert::assertEmpty(
             $this->recorded,
             'Expected no HTTP requests, but '.$this->requestCount().' were recorded.'
         );

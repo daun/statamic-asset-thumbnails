@@ -5,6 +5,8 @@ namespace Tests\Concerns;
 use Daun\StatamicAssetThumbnails\Drivers\DriverInterface;
 use Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver;
 use Daun\StatamicAssetThumbnails\Services\ThumbnailService;
+use Mockery\MockInterface;
+use PHPUnit\Framework\Assert;
 use transloadit\Transloadit;
 use transloadit\TransloaditResponse;
 
@@ -13,7 +15,7 @@ trait FakesTransloadit
     protected TransloaditDriver $transloaditDriver;
 
     /**
-     * @var \Mockery\MockInterface&Transloadit
+     * @var MockInterface&Transloadit
      */
     protected $mockTransloaditApi;
 
@@ -96,7 +98,7 @@ trait FakesTransloadit
             fn ($call) => $call['method'] === 'createAssembly'
         );
 
-        \PHPUnit\Framework\Assert::assertTrue($found, 'Expected createAssembly to be called, but it was not.');
+        Assert::assertTrue($found, 'Expected createAssembly to be called, but it was not.');
     }
 
     /**
@@ -120,7 +122,7 @@ trait FakesTransloadit
             ? "Expected getAssembly to be called with [{$assemblyId}], but it was not."
             : 'Expected getAssembly to be called, but it was not.';
 
-        \PHPUnit\Framework\Assert::assertTrue($found, $msg);
+        Assert::assertTrue($found, $msg);
     }
 
     /**
