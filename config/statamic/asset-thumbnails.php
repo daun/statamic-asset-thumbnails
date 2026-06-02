@@ -67,6 +67,11 @@ return [
     | controller to simplify setup. You can serve thumbnails much faster by
     | creating a custom disk inside the `public` folder and setting it here.
     |
+    | Note: Using a public disk means thumbnails are served without going
+    | through the control panel's authentication. Thumbnail URLs are keyed
+    | with your application's APP_KEY, making them non-guessable, but anyone
+    | who obtains a URL will be able to access that thumbnail.
+    |
     */
 
     'cache' => [
