@@ -113,7 +113,7 @@ class ThumbnailService
     public function put(Asset $asset, string $contents, string $filename): string|bool
     {
         $dir = $this->cacheDir($asset);
-        $path = $dir.'/'.$filename;
+        $path = $dir.'/'.basename($filename);
 
         Cache::forget($this->mutex($asset));
 
@@ -196,7 +196,7 @@ class ThumbnailService
 
     public function cacheDir(Asset $asset): string
     {
-        return md5($asset->id());
+        return hash_hmac('md5', $asset->id(), config('app.key'));
     }
 
     public function mutex(Asset $asset): ?string

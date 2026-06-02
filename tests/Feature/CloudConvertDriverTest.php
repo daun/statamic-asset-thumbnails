@@ -1,5 +1,6 @@
 <?php
 
+use CloudConvert\CloudConvert;
 use Daun\StatamicAssetThumbnails\Drivers\CloudConvertDriver;
 use Daun\StatamicAssetThumbnails\Jobs\CreateConversionJob;
 use Illuminate\Support\Facades\Bus;
@@ -85,12 +86,12 @@ test('does not support unknown formats', function (string $extension) {
 */
 
 test('exposes the CloudConvert API client', function () {
-    expect($this->driver->api())->toBeInstanceOf(\CloudConvert\CloudConvert::class);
+    expect($this->driver->api())->toBeInstanceOf(CloudConvert::class);
 });
 
 test('accepts api_key configuration', function () {
     $driver = new CloudConvertDriver(['api_key' => 'my-custom-key']);
-    expect($driver->api())->toBeInstanceOf(\CloudConvert\CloudConvert::class);
+    expect($driver->api())->toBeInstanceOf(CloudConvert::class);
 });
 
 /*

@@ -6,7 +6,7 @@ use Daun\StatamicAssetThumbnails\Services\ThumbnailService;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Daun\StatamicAssetThumbnails\Services\ThumbnailService
+ * @see ThumbnailService
  */
 class Thumbnails extends Facade
 {

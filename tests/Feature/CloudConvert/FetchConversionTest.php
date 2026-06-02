@@ -2,6 +2,9 @@
 
 use Daun\StatamicAssetThumbnails\Drivers\ConversionResult;
 use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Tests\Concerns\FakesCloudConvert;
 use Tests\Support\CloudConvertResponseFactory;
 
@@ -89,8 +92,8 @@ test('records all HTTP interactions for debugging', function () {
 
     foreach ($recorded as $interaction) {
         expect($interaction)->toHaveKeys(['request', 'response']);
-        expect($interaction['request'])->toBeInstanceOf(\Psr\Http\Message\RequestInterface::class);
-        expect($interaction['response'])->toBeInstanceOf(\Psr\Http\Message\ResponseInterface::class);
+        expect($interaction['request'])->toBeInstanceOf(RequestInterface::class);
+        expect($interaction['response'])->toBeInstanceOf(ResponseInterface::class);
     }
 });
 
@@ -98,7 +101,7 @@ test('returns Pending on API exception to allow retry', function () {
     // Queue no responses — the mock will return an empty 200 with "{}" body
     // The SDK hydrator will fail, triggering the catch block in fetchResult()
     $this->mockHttpClient->setDefaultResponse(
-        new \GuzzleHttp\Psr7\Response(500, [], '{"error": "Internal Server Error"}')
+        new Response(500, [], '{"error": "Internal Server Error"}')
     );
 
     $result = $this->cloudConvertDriver->fetchResult('job-123');

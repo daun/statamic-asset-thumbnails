@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0] - 2026-06-02
+
+- Add support for Laravel 13
+- Use app key for generating cache directory name
+- Sanitize filename returned from external services
+
 ## [1.1.0] - 2026-03-06
 
 - Add CloudConvert driver
@@ -27,6 +33,7 @@
 
 - Initial release
 
+[1.2.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.2.0
 [1.1.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.1.0
 [1.0.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.0.0
 [0.2.1]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/0.2.1
