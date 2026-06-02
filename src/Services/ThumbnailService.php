@@ -148,10 +148,22 @@ class ThumbnailService
      */
     public function download(string $url): ?string
     {
-        try {
-            $response = Http::get($url);
+        $maxSize = (int) (config('statamic.asset-thumbnails.cache.max_download_size') ?: 10 * 1024 * 1024);
 
-            return $response->successful() ? $response->body() : null;
+        try {
+            $response = Http::timeout(30)->connectTimeout(10)->get($url);
+
+            if (! $response->successful()) {
+                return null;
+            }
+
+            $body = $response->body();
+
+            if (strlen($body) > $maxSize) {
+                return null;
+            }
+
+            return $body;
         } catch (\Throwable) {
             return null;
         }
