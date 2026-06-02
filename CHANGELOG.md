@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1] - 2026-06-02
+
+- Add timeout and max filesize for thumbnail downloads
+- Distinguish permanent from transient API errors
+- Handle SDK exceptions manually
+- Guard against missing asset files
+
 ## [1.2.0] - 2026-06-02
 
 - Add support for Laravel 13
@@ -33,6 +40,7 @@
 
 - Initial release
 
+[1.2.1]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.2.1
 [1.2.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.2.0
 [1.1.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.1.0
 [1.0.0]: https://github.com/daun/statamic-asset-thumbnails/releases/tag/1.0.0
