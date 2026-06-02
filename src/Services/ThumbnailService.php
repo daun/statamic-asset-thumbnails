@@ -16,6 +16,8 @@ class ThumbnailService
 
     protected FilesystemAdapter $disk;
 
+    const MAX_DOWNLOAD_SIZE = 10 * 1024 * 1024; // 10 MB
+
     public function __construct()
     {
         $this->disk = $this->customCacheDisk() ?? $this->defaultCacheDisk();
@@ -148,8 +150,6 @@ class ThumbnailService
      */
     public function download(string $url): ?string
     {
-        $maxSize = (int) (config('statamic.asset-thumbnails.cache.max_download_size') ?: 10 * 1024 * 1024);
-
         try {
             $response = Http::timeout(30)->connectTimeout(10)->get($url);
 
@@ -159,7 +159,7 @@ class ThumbnailService
 
             $body = $response->body();
 
-            if (strlen($body) > $maxSize) {
+            if (strlen($body) > self::MAX_DOWNLOAD_SIZE) {
                 return null;
             }
 
