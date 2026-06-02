@@ -11,12 +11,7 @@ use Tests\Support\CloudConvertResponseFactory;
 | CloudConvert fetchResult() Error Handling Tests
 |--------------------------------------------------------------------------
 |
-| BUG: fetchResult() catches \Throwable and returns ConversionStatus::Pending
-| for ALL exceptions, including permanently fatal ones like invalid API keys.
-| This causes FetchConversionJob to retry up to 5 times for errors that will
-| never resolve.
-|
-| FIX: Distinguish transient errors (network, 5xx, 429) from permanent
+| Ensure we distinguish transient errors (network, 5xx, 429) from permanent
 | errors (401, 403, 404) and let permanent ones propagate to fail the job.
 */
 
@@ -29,36 +24,27 @@ beforeEach(function () {
     config(['queue.default' => 'sync']);
 });
 
-// ==== Tests that should FAIL before the fix ====
-
 test('propagates permanent authentication error instead of returning Pending', function () {
     // A 401 response from CloudConvert means the API key is invalid.
-    // This is a permanent error — retrying will never succeed.
     $this->mockHttpClient->addResponse(
         new Response(401, ['Content-Type' => 'application/json'], json_encode([
             'message' => 'Invalid API key',
         ]))
     );
 
-    // Before the fix: this returns Pending (bug — swallows permanent error)
-    // After the fix: this throws HttpClientException (correct — fails the job)
     $this->cloudConvertDriver->fetchResult('job-123');
 })->throws(HttpClientException::class);
 
 test('propagates permanent not-found error instead of returning Pending', function () {
-    // A 404 response means the job doesn't exist — retrying won't help.
+    // A 404 response means the job doesn't exist.
     $this->mockHttpClient->addResponse(
         new Response(404, ['Content-Type' => 'application/json'], json_encode([
             'message' => 'Job not found',
         ])),
     );
 
-    // Before the fix: this returns Pending (bug)
-    // After the fix: this throws HttpClientException (correct)
     $this->cloudConvertDriver->fetchResult('job-123');
 })->throws(HttpClientException::class);
-
-// ==== Tests that should PASS both before and after the fix ====
 
 test('returns Pending on transient server error', function () {
     // A 500 response is transient — the server might recover.
