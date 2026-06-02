@@ -14,7 +14,7 @@ use Statamic\Statamic;
 
 trait DealsWithAssets
 {
-    /** @var \Statamic\Assets\AssetContainer */
+    /** @var AssetContainer */
     public $assetContainer;
 
     protected function setUpAssetTest(): void

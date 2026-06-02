@@ -113,7 +113,7 @@ class ThumbnailService
     public function put(Asset $asset, string $contents, string $filename): string|bool
     {
         $dir = $this->cacheDir($asset);
-        $path = $dir.'/'.$filename;
+        $path = $dir.'/'.basename($filename);
 
         Cache::forget($this->mutex($asset));
 

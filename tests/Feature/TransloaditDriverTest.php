@@ -4,6 +4,7 @@ use Daun\StatamicAssetThumbnails\Drivers\TransloaditDriver;
 use Daun\StatamicAssetThumbnails\Jobs\CreateConversionJob;
 use Illuminate\Support\Facades\Bus;
 use Statamic\Assets\Asset;
+use transloadit\Transloadit;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,7 +94,7 @@ test('does not support unknown formats', function (string $extension) {
 */
 
 test('exposes the Transloadit API client', function () {
-    expect($this->driver->api())->toBeInstanceOf(\transloadit\Transloadit::class);
+    expect($this->driver->api())->toBeInstanceOf(Transloadit::class);
 });
 
 test('accepts auth_key and auth_secret configuration', function () {
@@ -101,7 +102,7 @@ test('accepts auth_key and auth_secret configuration', function () {
         'auth_key' => 'my-key',
         'auth_secret' => 'my-secret',
     ]);
-    expect($driver->api())->toBeInstanceOf(\transloadit\Transloadit::class);
+    expect($driver->api())->toBeInstanceOf(Transloadit::class);
 });
 
 /*

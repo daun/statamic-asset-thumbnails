@@ -190,6 +190,30 @@ test('FetchConversionJob skips if thumbnail already exists', function () {
     expect($this->fakeDriver->fetchedConversions)->toBeEmpty();
 });
 
+test('FetchConversionJob sanitizes filenames with path traversal', function () {
+    $this->fakeDriver->fakeResult = new ConversionResult(
+        'https://example.com/thumb.webp',
+        '../../evil.webp',
+    );
+
+    Http::fake([
+        'https://example.com/thumb.webp' => Http::response('fake-thumbnail-data', 200),
+    ]);
+
+    $asset = $this->uploadTestFileToTestContainer('test.txt', 'document.pdf');
+
+    $job = new FetchConversionJob($asset, 'conv-123');
+    $job->handle(app(ThumbnailService::class), $this->fakeDriver);
+
+    $service = app(ThumbnailService::class);
+    $dir = $service->cacheDir($asset);
+    $files = $service->disk()->files($dir);
+
+    expect($service->exists($asset))->toBeTrue();
+    expect($files)->toHaveCount(1);
+    expect($files[0])->toBe($dir.'/evil.webp');
+});
+
 test('FetchConversionJob stops after max attempts', function () {
     Bus::fake([FetchConversionJob::class]);
 
