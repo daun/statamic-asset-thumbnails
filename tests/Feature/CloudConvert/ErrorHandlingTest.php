@@ -8,7 +8,7 @@ use Tests\Support\CloudConvertResponseFactory;
 
 /*
 |--------------------------------------------------------------------------
-| CloudConvert fetchResult() Error Handling Tests
+| CloudConvert Error Handling Tests
 |--------------------------------------------------------------------------
 |
 | Ensure we distinguish transient errors (network, 5xx, 429) from permanent

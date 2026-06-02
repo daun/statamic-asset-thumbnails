@@ -41,7 +41,12 @@ class TransloaditDriver extends AbstractDriver implements DriverInterface
 
     public function fetchResult(string $conversionId): ConversionResult|ConversionStatus
     {
-        $response = $this->api->getAssembly($conversionId);
+        try {
+            $response = $this->api->getAssembly($conversionId);
+        } catch (\Throwable) {
+            return ConversionStatus::Pending;
+        }
+
         $assembly = ($response->data['ok'] ?? null) ? $response->data : null;
 
         if (! $assembly) {
