@@ -23,8 +23,8 @@
 ## [1.0.0] - 2026-02-08
 
 - Show preview in asset edit form
-- Require Static from stable channel
-- Test with PHP 8.0
+- Require Statamic from stable channel
+- Test with PHP 8.5
 
 ## [0.2.1] - 2025-10-15
 
