@@ -2,22 +2,15 @@
 
 use Daun\StatamicAssetThumbnails\Drivers\ConversionStatus;
 use Tests\Concerns\FakesTransloadit;
+use Tests\Support\TransloaditResponseFactory;
 
 /*
 |--------------------------------------------------------------------------
-| Transloadit fetchResult() Error Handling Tests
+| Transloadit Error Handling Tests
 |--------------------------------------------------------------------------
 |
-| BUG: TransloaditDriver::fetchResult() has no try/catch around the
-| SDK call. If the Transloadit SDK throws an exception (network error,
-| auth failure, etc.), it propagates directly to FetchConversionJob and
-| fails the job — bypassing the controlled retry/backoff logic.
-|
-| Compare with CloudConvertDriver which catches exceptions and returns
-| ConversionStatus::Pending to trigger orderly retries.
-|
-| FIX: Wrap the SDK call in try/catch and return Pending on errors,
-| consistent with CloudConvert's behavior for transient errors.
+| Ensure we distinguish transient errors (network, 5xx, 429) from permanent
+| errors (401, 403, 404) and let permanent ones propagate to fail the job.
 */
 
 uses(FakesTransloadit::class);
@@ -34,18 +27,15 @@ test('returns Pending when SDK throws an exception', function () {
     $this->mockTransloaditApi
         ->shouldReceive('getAssembly')
         ->once()
-        ->andThrow(new \RuntimeException('Network error'));
+        ->andThrow(new RuntimeException('Network error'));
 
-    // Before the fix: this throws RuntimeException (bug — no error handling)
-    // After the fix: this returns Pending (correct — allows orderly retry)
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
     expect($result)->toBe(ConversionStatus::Pending);
 });
 
 test('returns Pending when API returns error response', function () {
-    // The "ok" flag is false — should return Pending
-    $this->mockGetAssembly(\Tests\Support\TransloaditResponseFactory::apiError());
+    $this->mockGetAssembly(TransloaditResponseFactory::apiError());
 
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
@@ -53,7 +43,7 @@ test('returns Pending when API returns error response', function () {
 });
 
 test('returns Pending when assembly is still executing', function () {
-    $this->mockGetAssembly(\Tests\Support\TransloaditResponseFactory::assemblyExecuting());
+    $this->mockGetAssembly(TransloaditResponseFactory::assemblyExecuting());
 
     $result = $this->transloaditDriver->fetchResult('assembly-123');
 
