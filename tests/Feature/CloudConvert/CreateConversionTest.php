@@ -123,3 +123,15 @@ test('records all HTTP interactions for debugging', function () {
         expect($interaction['response'])->toBeInstanceOf(ResponseInterface::class);
     }
 });
+
+test('returns null when asset file does not exist', function () {
+    $this->mockHttpClient
+        ->addResponse(CloudConvertResponseFactory::jobCreated())
+        ->addResponse(CloudConvertResponseFactory::uploadSuccessful());
+
+    $asset = $this->makeEmptyAsset('test.nonexistent');
+    $result = $this->cloudConvertDriver->createConversion($asset);
+
+    expect($result)->toBeNull();
+    $this->mockHttpClient->assertNoRequestsMade();
+});
