@@ -16,6 +16,8 @@ class ThumbnailService
 
     protected FilesystemAdapter $disk;
 
+    const MAX_DOWNLOAD_SIZE = 10 * 1024 * 1024; // 10 MB
+
     public function __construct()
     {
         $this->disk = $this->customCacheDisk() ?? $this->defaultCacheDisk();
@@ -149,9 +151,19 @@ class ThumbnailService
     public function download(string $url): ?string
     {
         try {
-            $response = Http::get($url);
+            $response = Http::timeout(30)->connectTimeout(10)->get($url);
 
-            return $response->successful() ? $response->body() : null;
+            if (! $response->successful()) {
+                return null;
+            }
+
+            $body = $response->body();
+
+            if (strlen($body) > self::MAX_DOWNLOAD_SIZE) {
+                return null;
+            }
+
+            return $body;
         } catch (\Throwable) {
             return null;
         }
